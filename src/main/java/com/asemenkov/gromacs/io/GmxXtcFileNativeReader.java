@@ -1,10 +1,12 @@
 package com.asemenkov.gromacs.io;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.asemenkov.gromacs.exceptions.GmxIoException;
 import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
 import com.asemenkov.utils.Logger;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * @author asemenkov
@@ -15,8 +17,15 @@ public class GmxXtcFileNativeReader {
     private static boolean isBusy;
 
     static {
-        Logger.log("Loading xtc-native-reader library.");
-        System.loadLibrary("xtc-native-reader");
+        String lib = Paths.get("lib", "xtc-native-reader").toAbsolutePath().toString();
+
+        if (SystemUtils.IS_OS_LINUX) lib += ".so";
+        else if (SystemUtils.IS_OS_MAC) lib += ".dylib";
+        else if (SystemUtils.IS_OS_WINDOWS) lib += ".dll";
+        else throw new GmxIoException("Unsupported OS: " + SystemUtils.OS_NAME);
+
+        Logger.log("Loading xtc-native-reader library: " + lib);
+        System.load(lib);
     }
 
     private native boolean openXtcFileC(String xtcFile);
