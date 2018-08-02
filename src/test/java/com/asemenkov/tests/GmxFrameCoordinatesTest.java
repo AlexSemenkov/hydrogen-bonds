@@ -8,10 +8,10 @@ import java.util.stream.IntStream;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.asemenkov.gromacs.exceptions.GmxFrameException;
-import com.asemenkov.gromacs.exceptions.GmxIoException;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
 import com.asemenkov.gromacs.particles.GmxAtom;
@@ -29,12 +29,12 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratch() {
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 200000) //
                 .withResidues("SOL", 200000) //
                 .withBox(BOX) //
-                .buildFromScratch();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
@@ -49,11 +49,11 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratchWithoutResidues() {
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 2000) //
                 .withBox(BOX) //
-                .buildFromScratch();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
@@ -65,11 +65,11 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratchWithoutFreeAtoms() {
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
                 .withDescription("From scratch") //
                 .withResidues("SOL", 2000) //
                 .withBox(BOX) //
-                .buildFromScratch();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //

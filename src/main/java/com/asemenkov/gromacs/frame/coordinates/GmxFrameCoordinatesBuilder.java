@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.frame;
+package com.asemenkov.gromacs.frame.coordinates;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,10 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.asemenkov.gromacs.exceptions.GmxFrameException;
-import com.asemenkov.gromacs.exceptions.GmxIoException;
+import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;

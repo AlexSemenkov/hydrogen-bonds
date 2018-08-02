@@ -8,8 +8,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.particles.GmxAnglePredicate;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
@@ -53,12 +53,12 @@ public class GmxWaterDimerExperiment extends GmxAbstractTest {
         boolean result2 = waters[1].rotateWhile(predicate2, predicate3);
         Assert.assertTrue(result2, "Rotation of the 2nd molecule H2O failed.");
 
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromArraysBuilderSupplier.get() //
                 .withDescription("Water Dimer") //
                 .withBox(new float[] { 7.f, 7.f, 7.f }) //
                 .withResiduesArray(waters) //
                 .withAtomsArray(atoms) //
-                .buildFromArrays();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withFrameNo(1) //

@@ -9,8 +9,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.particles.GmxAnglePredicate;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.tests.GmxAbstractTest;
@@ -33,8 +33,8 @@ public class GmxWaterTrimerExperiment extends GmxAbstractTest {
     private GmxAnglePredicate h1Predicate, h2Predicate;
     private boolean result;
 
-    private GmxResidueH2O[] waters = new GmxResidueH2O[3];
-    private GmxAtom[] atoms = new GmxAtom[9];
+    private final GmxResidueH2O[] waters = new GmxResidueH2O[3];
+    private final GmxAtom[] atoms = new GmxAtom[9];
     private GmxAtom o1, o2, o3, hDonor1, hDonor2, hDonor3, hFree1, hFree2, hFree3;
 
     @BeforeMethod
@@ -156,12 +156,12 @@ public class GmxWaterTrimerExperiment extends GmxAbstractTest {
     }
 
     private void writeTrimerIntoGroFile(String description, String fileNAme) {
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromArraysBuilderSupplier.get() //
                 .withDescription(description) //
                 .withBox(WATER_TRIMER_BOX) //
                 .withResiduesArray(waters) //
                 .withAtomsArray(atoms) //
-                .buildFromArrays();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withFrameNo(1) //

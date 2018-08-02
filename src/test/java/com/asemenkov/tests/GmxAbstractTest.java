@@ -4,18 +4,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
+import com.asemenkov.gromacs.frame.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameConfig;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinatesBuilder;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
-import com.asemenkov.gromacs.frame.GmxFrameStructureBuilder;
+import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
 import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
-import com.asemenkov.gromacs.io.GmxIoConfig;
+import com.asemenkov.gromacs.io.config.GmxIoConfig;
 import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
 import com.asemenkov.gromacs.particles.GmxAnglePredicate;
 import com.asemenkov.gromacs.particles.GmxAtom;
@@ -41,7 +40,11 @@ public abstract class GmxAbstractTest extends AbstractTestNGSpringContextTests {
 
     protected @Autowired GmxXtcFileNativeReader xtcFileNativeReader;
     protected @Autowired GmxGroFileReaderAndWriter groFileReaderAndWriter;
-    protected @Autowired Supplier<GmxFrameStructureBuilder> frameStructureBuilderSupplier;
+
+    protected @Autowired Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier;
+    protected @Autowired Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier;
+    protected @Autowired Supplier<GmxFrameStructureFromArraysBuilder> frameStructureFromArraysBuilderSupplier;
+
     protected @Autowired Supplier<GmxFrameCoordinatesBuilder> frameCoordinatesBuilderSupplier;
 
     /**

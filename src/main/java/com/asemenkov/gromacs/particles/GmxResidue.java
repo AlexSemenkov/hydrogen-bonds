@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.asemenkov.gromacs.exceptions.GmxAtomTypeException;
+import com.asemenkov.gromacs.particles.exceptions.GmxAtomTypeException;
 import com.asemenkov.utils.Logger;
 
 /**
@@ -34,17 +34,15 @@ public abstract class GmxResidue {
      * @param abbreviation -- default name of the residue, i.e. "SOL"</br>
      *                     not final, can be changed later
      */
-    public GmxResidue(String fullName, String abbreviation) {
+    protected GmxResidue(String fullName, String abbreviation) {
         this.abbreviation = abbreviation;
         this.fullName = fullName;
     }
 
+    // ======== COMPARATORS ========
+
     public static int cmpByRadiusVector(GmxResidue residue1, GmxResidue residue2) {
         return Double.compare(residue1.getRadiusVector(), residue2.getRadiusVector());
-    }
-
-    public double getRadiusVector() {
-        return getPivotAtom().getRadiusVector();
     }
 
     // ======== ACTIONS WITH COORDINATES ========
@@ -106,27 +104,41 @@ public abstract class GmxResidue {
         return false;
     }
 
-    public String getAbbreviation() {
-        return abbreviation;
-    }
-
     // ======== GETTERS ========
-
-    public int getResidueNo() {
-        return residueNo;
-    }
-
-    public void setResidueNo(int residueNo) {
-        this.residueNo = residueNo;
-    }
 
     public String getFullName() {
         return fullName;
     }
 
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public int getResidueNo() {
+        return residueNo;
+    }
+
+    public double getRadiusVector() {
+        return getPivotAtom().getRadiusVector();
+    }
+
     public GmxAtom[] getAllAtoms() {
         return allAtoms;
     }
+
+    public GmxAtom getAcceptorAtom() {
+        return acceptorAtom;
+    }
+
+    public GmxAtom[] getDonorAtoms() {
+        return donorAtoms;
+    }
+
+    public GmxAtom getPivotAtom() {
+        return pivotAtom;
+    }
+
+    // ======== SETTERS ========
 
     public void setAllAtoms(GmxAtom... atoms) {
         if (allAtomFields == null || allAtomFields.length != atoms.length) //
@@ -144,35 +156,23 @@ public abstract class GmxResidue {
             }
     }
 
-    public GmxAtom[] getDonorAtoms() {
-        return donorAtoms;
+    public void setResidueNo(int residueNo) {
+        this.residueNo = residueNo;
     }
 
-    public GmxAtom getPivotAtom() {
-        return pivotAtom;
-    }
-
-    // ======== PACKAGE ACCESS ========
-
-    public GmxAtom getAcceptorAtom() {
-        return acceptorAtom;
-    }
-
-    void setAllAtomFields(Field[] allAtomFields) {
+    public void setAllAtomFields(Field[] allAtomFields) {
         this.allAtomFields = allAtomFields;
     }
 
-    void setDonorFields(Field[] donorFields) {
+    public void setDonorFields(Field[] donorFields) {
         this.donorFields = donorFields;
     }
 
-    void setPivotField(Field pivotField) {
+    public void setPivotField(Field pivotField) {
         this.pivotField = pivotField;
     }
 
-    // ======== COMPARATORS ========
-
-    void setAcceptorField(Field acceptorField) {
+    public void setAcceptorField(Field acceptorField) {
         this.acceptorField = acceptorField;
     }
 

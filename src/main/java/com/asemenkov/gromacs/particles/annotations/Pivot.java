@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.annotations;
+package com.asemenkov.gromacs.particles.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author asemenkov
- * @since Apr 19, 2018
+ * @since May 6, 2018
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Acceptor {
+public @interface Pivot {
 
 }

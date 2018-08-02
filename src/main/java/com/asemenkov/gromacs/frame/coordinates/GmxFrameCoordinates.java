@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.frame;
+package com.asemenkov.gromacs.frame.coordinates;
 
 /**
  * @author asemenkov

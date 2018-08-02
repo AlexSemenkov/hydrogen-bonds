@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.particles;
+package com.asemenkov.gromacs.particles.config;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -6,13 +6,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.asemenkov.gromacs.particles.GmxAnglePredicate;
+import com.asemenkov.gromacs.particles.GmxAtom;
+import com.asemenkov.gromacs.particles.GmxResidue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.asemenkov.gromacs.annotations.ResidueAtom;
-import com.asemenkov.gromacs.exceptions.GmxAtomTypeException;
+import com.asemenkov.gromacs.particles.annotations.ResidueAtom;
+import com.asemenkov.gromacs.particles.exceptions.GmxAtomTypeException;
 import com.asemenkov.utils.Factories.DuoFactory;
 import com.asemenkov.utils.Factories.PentaFactory;
 import com.asemenkov.utils.Factories.TetraFactory;

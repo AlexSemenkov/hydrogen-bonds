@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.exceptions;
+package com.asemenkov.gromacs.particles.exceptions;
 
 /**
  * @author asemenkov

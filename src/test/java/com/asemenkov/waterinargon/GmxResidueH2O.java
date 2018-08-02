@@ -1,11 +1,11 @@
 package com.asemenkov.waterinargon;
 
-import com.asemenkov.gromacs.annotations.Acceptor;
-import com.asemenkov.gromacs.annotations.Donor;
-import com.asemenkov.gromacs.annotations.Pivot;
-import com.asemenkov.gromacs.annotations.PivotDeltas;
-import com.asemenkov.gromacs.annotations.Residue;
-import com.asemenkov.gromacs.annotations.ResidueAtom;
+import com.asemenkov.gromacs.particles.annotations.Acceptor;
+import com.asemenkov.gromacs.particles.annotations.Donor;
+import com.asemenkov.gromacs.particles.annotations.Pivot;
+import com.asemenkov.gromacs.particles.annotations.PivotDeltas;
+import com.asemenkov.gromacs.particles.annotations.Residue;
+import com.asemenkov.gromacs.particles.annotations.ResidueAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 
 /**

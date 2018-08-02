@@ -1,16 +1,18 @@
-package com.asemenkov.gromacs.frame;
+package com.asemenkov.gromacs.frame.config;
 
 import java.util.function.Supplier;
 
+import com.asemenkov.gromacs.frame.GmxFrame;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
+import com.asemenkov.gromacs.frame.structure.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
-import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameStructureBuilder;
-import com.asemenkov.gromacs.particles.GmxParticlesConfig;
+import com.asemenkov.gromacs.particles.config.GmxParticlesConfig;
 import com.asemenkov.utils.Logger;
 import com.asemenkov.utils.Factories.DuoFactory;
 
@@ -25,8 +27,22 @@ public class GmxFrameConfig {
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     @SuppressWarnings("WeakerAccess")
-    protected GmxFrameStructureBuilder frameStructureBuilder() {
-        return new GmxFrameStructureBuilder();
+    protected GmxFrameStructureFromGroFileBuilder frameStructureFromGroFileBuilder() {
+        return new GmxFrameStructureFromGroFileBuilder();
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    @SuppressWarnings("WeakerAccess")
+    protected GmxFrameStructureFromScratchBuilder frameStructureFromScratchBuilder() {
+        return new GmxFrameStructureFromScratchBuilder();
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    @SuppressWarnings("WeakerAccess")
+    protected GmxFrameStructureFromArraysBuilder frameStructureFromArraysBuilder() {
+        return new GmxFrameStructureFromArraysBuilder();
     }
 
     @Bean
@@ -44,8 +60,18 @@ public class GmxFrameConfig {
     }
 
     @Bean
-    public Supplier<GmxFrameStructureBuilder> frameStructureBuilderSupplier() {
-        return this::frameStructureBuilder;
+    public Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier() {
+        return this::frameStructureFromGroFileBuilder;
+    }
+
+    @Bean
+    public Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier() {
+        return this::frameStructureFromScratchBuilder;
+    }
+
+    @Bean
+    public Supplier<GmxFrameStructureFromArraysBuilder> frameStructureFromArraysBuilderSupplier() {
+        return this::frameStructureFromArraysBuilder;
     }
 
     @Bean

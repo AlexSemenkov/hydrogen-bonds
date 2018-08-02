@@ -13,8 +13,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.tests.GmxAbstractTest;
@@ -38,11 +38,11 @@ public class GmxWaterInArgonExperiment extends GmxAbstractTest {
     public void buildFrame() {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_ARGON_GRID);
 
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_ARGON_GRID)) //
                 .withBox(groFileReaderAndWriter.readGroFileBox(GRO_ARGON_GRID)) //
                 .withGroFileAtomLines(groFileAtomLines) //
-                .buildFromGroFile();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //

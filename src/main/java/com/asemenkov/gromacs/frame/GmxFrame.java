@@ -8,9 +8,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructureFromArraysBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.asemenkov.gromacs.exceptions.GmxFrameException;
+import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 import com.asemenkov.utils.Factories.DuoFactory;
@@ -28,7 +32,7 @@ public final class GmxFrame {
     private @Autowired DuoFactory<GmxAtom[], Class<? extends GmxResidue>, float[]> residueAtomsFactory;
     private @Autowired TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueFactory;
     private @Autowired TriFactory<GmxResidue[], Class<? extends GmxResidue>, int[], GmxAtom[][]> residuesFactory;
-    private @Autowired Supplier<GmxFrameStructureBuilder> frameStructureBuilderSupplier;
+    private @Autowired GmxFrameStructureFromArraysBuilder frameStructureFromArraysBuilder;
     private @Autowired Supplier<GmxFrameCoordinatesBuilder> frameCoordinatesBuilderSupplier;
 
     private GmxFrameStructure frameStructure;
@@ -38,7 +42,7 @@ public final class GmxFrame {
 
     // ======== FRAME VALIDATION ========
 
-    void validateFrameStructureAtoms() {
+    public void validateFrameStructureAtoms() {
         if (atomFactory == null) throw new GmxFrameException("atomFactory isn't injected");
         if (frameStructure == null) throw new GmxFrameException("frameStructure is missing");
         if (frameCoordinates == null) throw new GmxFrameException("frameCoordinates is missing");
@@ -51,7 +55,7 @@ public final class GmxFrame {
             throw new GmxFrameException("frameStructure doesn't specify atoms abbreviations sequence");
     }
 
-    void validateFrameStructureResidues() {
+    public void validateFrameStructureResidues() {
         if (residueFactory == null) throw new GmxFrameException("residueFactory isn't injected");
         if (residuesFactory == null) throw new GmxFrameException("residuesFactory isn't injected");
         if (frameStructure == null) throw new GmxFrameException("frameStructure is missing");
@@ -64,7 +68,7 @@ public final class GmxFrame {
 
     // ======== FRAME INITIALIZATION ========
 
-    void initAtoms() {
+    public void initAtoms() {
         atoms = new GmxAtom[frameStructure.getAtomsNum()];
         Class<? extends GmxAtom>[] atomClasses = frameStructure.getAtomsSequence();
         String[] atomAbbreviations = frameStructure.getAtomAbbreviationsSequence();
@@ -73,7 +77,7 @@ public final class GmxFrame {
                 atoms[i] = atomFactory.get(atomClasses[i], atomAbbreviations[i], i, atomCoordinates[i]));
     }
 
-    void initResidues() {
+    public void initResidues() {
         this.residues = new GmxResidue[frameStructure.getResiduesNum()];
         AtomicInteger arrayIndex = new AtomicInteger(0);
 
@@ -89,22 +93,14 @@ public final class GmxFrame {
         });
     }
 
-    // ======== GETTERS & SETTERS========
+    // ======== GETTERS ========
 
     public GmxFrameStructure getFrameStructure() {
         return frameStructure;
     }
 
-    void setFrameStructure(GmxFrameStructure frameStructure) {
-        this.frameStructure = frameStructure;
-    }
-
     public GmxFrameCoordinates getFrameCoordinates() {
         return frameCoordinates;
-    }
-
-    void setFrameCoordinates(GmxFrameCoordinates frameCoordinates) {
-        this.frameCoordinates = frameCoordinates;
     }
 
     public GmxAtom[] getAtoms() {
@@ -131,19 +127,8 @@ public final class GmxFrame {
         return frameStructure.getDescription();
     }
 
-    public void setDescription(String description) {
-        frameStructure.setDescription(description);
-        Logger.log("Frame description is updated: " + description);
-    }
-
     public float[] getBox() {
         return Arrays.copyOf(frameStructure.getBox(), 3);
-    }
-
-    public void setBox(float[] box) {
-        if (box == null || box.length != 3) throw new GmxFrameException("invalid box: " + Arrays.toString(box));
-        frameStructure.setBox(Arrays.copyOf(box, 3));
-        Logger.log("Frame box is updated: " + Arrays.toString(box));
     }
 
     public GmxAtom getAtomWithMinimumX() {
@@ -168,6 +153,27 @@ public final class GmxFrame {
 
     public GmxAtom getAtomWithMaximumZ() {
         return Arrays.stream(atoms).max(GmxAtom::cmpByCoordinateZ).orElseThrow(GmxFrameException::new);
+    }
+
+    // ======== SETTERS ========
+
+    public void setFrameStructure(GmxFrameStructure frameStructure) {
+        this.frameStructure = frameStructure;
+    }
+
+    public void setFrameCoordinates(GmxFrameCoordinates frameCoordinates) {
+        this.frameCoordinates = frameCoordinates;
+    }
+
+    public void setDescription(String description) {
+        frameStructure.setDescription(description);
+        Logger.log("Frame description is updated: " + description);
+    }
+
+    public void setBox(float[] box) {
+        if (box == null || box.length != 3) throw new GmxFrameException("invalid box: " + Arrays.toString(box));
+        frameStructure.setBox(Arrays.copyOf(box, 3));
+        Logger.log("Frame box is updated: " + Arrays.toString(box));
     }
 
     // ======== NEIGHBOURS ========
@@ -280,12 +286,12 @@ public final class GmxFrame {
 
     @SuppressWarnings("WeakerAccess")
     public void updateFrameStructure() {
-        frameStructure = frameStructureBuilderSupplier.get() //
+        frameStructure = frameStructureFromArraysBuilder //
                 .withDescription(frameStructure.getDescription()) //
                 .withAtomsArray(this.atoms) //
                 .withResiduesArray(this.residues) //
                 .withBox(frameStructure.getBox()) //
-                .buildFromArrays();
+                .build();
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.annotations;
+package com.asemenkov.gromacs.particles.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.exceptions;
+package com.asemenkov.gromacs.frame.exceptions;
 
 /**
  * @author asemenkov

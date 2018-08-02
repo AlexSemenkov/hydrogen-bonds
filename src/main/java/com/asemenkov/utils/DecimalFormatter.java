@@ -8,7 +8,7 @@ import java.util.Locale;
  * @author asemenkov
  * @since Jun 8, 2018
  */
-public class DecimalFormatters {
+public class DecimalFormatter {
 
     private static final DecimalFormatSymbols DFS_US = new DecimalFormatSymbols(Locale.US);
     public static final DecimalFormat DF_1_12 = new DecimalFormat("#.############", DFS_US);

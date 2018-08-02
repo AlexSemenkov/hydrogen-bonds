@@ -1,6 +1,6 @@
 package com.asemenkov.utils;
 
-import com.asemenkov.gromacs.exceptions.GmxIoException;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 
 import static java.nio.file.StandardOpenOption.*;
 

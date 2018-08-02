@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.frame;
+package com.asemenkov.gromacs.frame.structure;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -35,10 +35,6 @@ public class GmxFrameStructure {
         return description;
     }
 
-    void setDescription(String description) {
-        this.description = description;
-    }
-
     public Integer getAtomsNum() {
         return atomsSequence.length;
     }
@@ -51,10 +47,6 @@ public class GmxFrameStructure {
         return Arrays.copyOf(box, 3);
     }
 
-    void setBox(float[] box) {
-        System.arraycopy(box, 0, this.box, 0, 3);
-    }
-
     public Class<? extends GmxAtom>[] getAtomsSequence() {
         return atomsSequence;
     }
@@ -63,14 +55,22 @@ public class GmxFrameStructure {
         return atomAbbreviationsSequence;
     }
 
-    // ======== SETTERS ========
-
     public Map<Class<? extends GmxResidue>, int[]> getResidueIndexesMap() {
         return residueIndexesMap;
     }
 
     public Map<Integer, int[]> getResidueAtomsMap() {
         return residueAtomsMap;
+    }
+
+    // ======== SETTERS ========
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setBox(float[] box) {
+        System.arraycopy(box, 0, this.box, 0, 3);
     }
 
     void setAtomAbbreviation(int index, String atomAbbreviation) {

@@ -1,5 +1,6 @@
-package com.asemenkov.gromacs.io;
+package com.asemenkov.gromacs.io.config;
 
+import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

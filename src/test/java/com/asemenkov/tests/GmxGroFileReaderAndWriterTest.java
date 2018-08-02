@@ -8,8 +8,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.GmxFrameStructure;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
+import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
@@ -91,11 +91,11 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
     @Test
     public void testGroFileWriting() {
         List<GmxGroFileAtomLine> atomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
-        GmxFrameStructure frameStructure = frameStructureBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
                 .withBox(groFileReaderAndWriter.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(atomLines) //
-                .buildFromGroFile();
+                .build();
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
                 .withGroFileAtomLines(atomLines) //

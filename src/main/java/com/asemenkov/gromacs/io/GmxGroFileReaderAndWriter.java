@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-import com.asemenkov.gromacs.exceptions.GmxIoException;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;

@@ -3,8 +3,8 @@ package com.asemenkov.tests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.asemenkov.gromacs.exceptions.GmxIoException;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 
 /**
  * @author asemenkov

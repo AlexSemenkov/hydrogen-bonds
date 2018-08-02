@@ -1,6 +1,6 @@
 package com.asemenkov.waterinargon;
 
-import com.asemenkov.gromacs.annotations.Atom;
+import com.asemenkov.gromacs.particles.annotations.Atom;
 import com.asemenkov.gromacs.particles.GmxAtom;
 
 /**

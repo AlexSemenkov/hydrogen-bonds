@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.particles;
+package com.asemenkov.gromacs.particles.config;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.asemenkov.gromacs.exceptions.GmxAtomTypeException;
+import com.asemenkov.gromacs.particles.GmxResidue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +19,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
-import com.asemenkov.gromacs.annotations.Acceptor;
-import com.asemenkov.gromacs.annotations.Donor;
-import com.asemenkov.gromacs.annotations.Pivot;
-import com.asemenkov.gromacs.annotations.PivotDeltas;
-import com.asemenkov.gromacs.annotations.Residue;
-import com.asemenkov.gromacs.annotations.ResidueAtom;
-import com.asemenkov.gromacs.exceptions.GmxAnnotationException;
+import com.asemenkov.gromacs.particles.annotations.Acceptor;
+import com.asemenkov.gromacs.particles.annotations.Donor;
+import com.asemenkov.gromacs.particles.annotations.Pivot;
+import com.asemenkov.gromacs.particles.annotations.PivotDeltas;
+import com.asemenkov.gromacs.particles.annotations.Residue;
+import com.asemenkov.gromacs.particles.annotations.ResidueAtom;
+import com.asemenkov.gromacs.particles.exceptions.GmxAnnotationException;
 import com.asemenkov.utils.Logger;
 
 /**
@@ -35,7 +35,7 @@ import com.asemenkov.utils.Logger;
 
 @Configuration
 @PropertySource("classpath:gromacs.properties")
-public class GmxResidueReflectionConfig {
+class GmxResidueReflectionConfig {
 
     private Map<String, Class<? extends GmxResidue>> residueClassesMap;
     private Map<Class<? extends GmxResidue>, Field[]> residueAtomsMap;

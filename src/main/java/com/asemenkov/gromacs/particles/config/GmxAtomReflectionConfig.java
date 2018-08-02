@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.particles;
+package com.asemenkov.gromacs.particles.config;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.asemenkov.gromacs.particles.GmxAtom;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
-import com.asemenkov.gromacs.annotations.Atom;
-import com.asemenkov.gromacs.exceptions.GmxAnnotationException;
+import com.asemenkov.gromacs.particles.annotations.Atom;
+import com.asemenkov.gromacs.particles.exceptions.GmxAnnotationException;
 import com.asemenkov.utils.Logger;
 
 /**
@@ -28,7 +29,7 @@ import com.asemenkov.utils.Logger;
 
 @Configuration
 @PropertySource("classpath:gromacs.properties")
-public class GmxAtomReflectionConfig {
+class GmxAtomReflectionConfig {
 
     private Map<String, Class<? extends GmxAtom>> atomClassesMap;
 

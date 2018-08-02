@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
-import com.asemenkov.gromacs.exceptions.GmxIoException;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 
@@ -133,7 +133,7 @@ public class GmxGroFileAtomLine {
     @Override
     public String toString() {
         if (coordinates == null || coordinates.length != 3) //
-            throw new GmxIoException("Invlaid GRO line coordinates: " + Arrays.toString(coordinates));
+            throw new GmxIoException("Invalid GRO line coordinates: " + Arrays.toString(coordinates));
         if (velocities == null || velocities.length != 3) //
             return String.format(Locale.US, ATOM_LINE_WO_VELOCITIES_FORMAT, //
                     residueNo, residueAbbreviation, atomAbbreviation, atomNo, //

@@ -3,8 +3,8 @@ package com.asemenkov.gromacs.io;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.asemenkov.gromacs.exceptions.GmxIoException;
-import com.asemenkov.gromacs.frame.GmxFrameCoordinates;
+import com.asemenkov.gromacs.io.exceptions.GmxIoException;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.utils.Logger;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -36,10 +36,9 @@ public class GmxXtcFileNativeReader {
 
     private native int getNumberOfAtomsC();
 
-    public boolean openXtcFile(Path xtcFilePath) {
+    public void openXtcFile(Path xtcFilePath) {
         if (isBusy) throw new GmxIoException("The previous .xtc file is still opened.");
         else isBusy = openXtcFileC(xtcFilePath.toAbsolutePath().toString());
-        return isBusy;
     }
 
     public GmxFrameCoordinates readNextFrame() {
