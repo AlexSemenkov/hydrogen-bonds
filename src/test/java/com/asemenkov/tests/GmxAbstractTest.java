@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
+import com.asemenkov.gromacs.frame.coordinates.*;
 import com.asemenkov.gromacs.frame.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,8 +12,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
 import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
 import com.asemenkov.gromacs.io.config.GmxIoConfig;
 import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
@@ -45,7 +44,9 @@ public abstract class GmxAbstractTest extends AbstractTestNGSpringContextTests {
     protected @Autowired Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier;
     protected @Autowired Supplier<GmxFrameStructureFromArraysBuilder> frameStructureFromArraysBuilderSupplier;
 
-    protected @Autowired Supplier<GmxFrameCoordinatesBuilder> frameCoordinatesBuilderSupplier;
+    protected @Autowired Supplier<GmxFrameCoordinatesFromGroFileBuilder> frameCoordinatesFromGroFileBuilderSupplier;
+    protected @Autowired Supplier<GmxFrameCoordinatesFromScratchBuilder> frameCoordinatesFromScratchBuilderSupplier;
+    protected @Autowired Supplier<GmxFrameCoordinatesFromArraysBuilder> frameCoordinatesFromArraysBuilderSupplier;
 
     /**
      * @implSpec t1 -- (Class) atom class

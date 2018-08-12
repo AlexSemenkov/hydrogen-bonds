@@ -3,8 +3,7 @@ package com.asemenkov.gromacs.frame.config;
 import java.util.function.Supplier;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
+import com.asemenkov.gromacs.frame.coordinates.*;
 import com.asemenkov.gromacs.frame.structure.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -48,8 +47,22 @@ public class GmxFrameConfig {
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     @SuppressWarnings("WeakerAccess")
-    protected GmxFrameCoordinatesBuilder frameCoordinatesBuilder() {
-        return new GmxFrameCoordinatesBuilder();
+    protected GmxFrameCoordinatesFromGroFileBuilder frameCoordinatesFromGroFileBuilder() {
+        return new GmxFrameCoordinatesFromGroFileBuilder();
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    @SuppressWarnings("WeakerAccess")
+    protected GmxFrameCoordinatesFromScratchBuilder frameCoordinatesFromScratchBuilder() {
+        return new GmxFrameCoordinatesFromScratchBuilder();
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    @SuppressWarnings("WeakerAccess")
+    protected GmxFrameCoordinatesFromArraysBuilder frameCoordinatesFromArraysBuilder() {
+        return new GmxFrameCoordinatesFromArraysBuilder();
     }
 
     @Bean
@@ -58,6 +71,8 @@ public class GmxFrameConfig {
     protected GmxFrame frame() {
         return new GmxFrame();
     }
+
+    // ======== INTERFACE ========
 
     @Bean
     public Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier() {
@@ -75,8 +90,18 @@ public class GmxFrameConfig {
     }
 
     @Bean
-    public Supplier<GmxFrameCoordinatesBuilder> frameCoordinatesBuilderSupplier() {
-        return this::frameCoordinatesBuilder;
+    public Supplier<GmxFrameCoordinatesFromGroFileBuilder> frameCoordinatesFromGroFileBuilderSupplier() {
+        return this::frameCoordinatesFromGroFileBuilder;
+    }
+
+    @Bean
+    public Supplier<GmxFrameCoordinatesFromScratchBuilder> frameCoordinatesFromScratchBuilderSupplier() {
+        return this::frameCoordinatesFromScratchBuilder;
+    }
+
+    @Bean
+    public Supplier<GmxFrameCoordinatesFromArraysBuilder> frameCoordinatesFromArraysBuilderSupplier() {
+        return this::frameCoordinatesFromArraysBuilder;
     }
 
     @Bean

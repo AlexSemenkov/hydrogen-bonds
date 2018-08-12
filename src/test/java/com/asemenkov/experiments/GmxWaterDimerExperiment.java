@@ -60,10 +60,10 @@ public class GmxWaterDimerExperiment extends GmxAbstractTest {
                 .withAtomsArray(atoms) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromArraysBuilderSupplier.get() //
                 .withFrameNo(1) //
                 .withAtomsArray(atoms) //
-                .buildFromArray();
+                .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, WATER_DIMER, WATER_DIMER_GRO);

@@ -97,10 +97,10 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
                 .withGroFileAtomLines(atomLines) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(atomLines) //
                 .withFrameNo(0) //
-                .buildFromGroFile();
+                .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
         Path path = groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_IN_ARGON_PATH.getParent(), "test-H2O-in-Ar");

@@ -44,10 +44,10 @@ public class GmxWaterInArgonExperiment extends GmxAbstractTest {
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(1) //
-                .buildFromGroFile();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
     }

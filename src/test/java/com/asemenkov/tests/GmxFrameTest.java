@@ -67,10 +67,10 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(1) //
-                .buildFromGroFile();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
     }
@@ -87,10 +87,10 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(1) //
-                .buildFromScratch();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "without-residues.gro");
@@ -111,10 +111,10 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(2) //
-                .buildFromGroFile();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-gro-file.gro");
@@ -160,10 +160,10 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(4) //
-                .buildFromScratch();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-scratch.gro");
@@ -184,10 +184,10 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromArraysBuilderSupplier.get() //
                 .withAtomsArray(frame.getAtoms()) //
                 .withFrameNo(5) //
-                .buildFromArray();
+                .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-arrays.gro");

@@ -38,10 +38,10 @@ public class GmxArgonGridSpaceExperiment extends GmxAbstractTest {
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(1) //
-                .buildFromGroFile();
+                .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
         String spaces = Arrays.stream(frame.getAtoms()) //

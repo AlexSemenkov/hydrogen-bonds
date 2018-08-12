@@ -163,10 +163,10 @@ public class GmxWaterTrimerExperiment extends GmxAbstractTest {
                 .withAtomsArray(atoms) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
-                .withFrameNo(1) //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromArraysBuilderSupplier.get() //
                 .withAtomsArray(atoms) //
-                .buildFromArray();
+                .withFrameNo(1) //
+                .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_TRIMER, fileNAme);

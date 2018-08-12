@@ -5,11 +5,10 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesBuilder;
+import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesFromArraysBuilder;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructureFromArraysBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public final class GmxFrame {
     private @Autowired TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueFactory;
     private @Autowired TriFactory<GmxResidue[], Class<? extends GmxResidue>, int[], GmxAtom[][]> residuesFactory;
     private @Autowired GmxFrameStructureFromArraysBuilder frameStructureFromArraysBuilder;
-    private @Autowired Supplier<GmxFrameCoordinatesBuilder> frameCoordinatesBuilderSupplier;
+    private @Autowired GmxFrameCoordinatesFromArraysBuilder frameCoordinatesFromArraysBuilder;
 
     private GmxFrameStructure frameStructure;
     private GmxFrameCoordinates frameCoordinates;
@@ -296,10 +295,10 @@ public final class GmxFrame {
 
     @SuppressWarnings("WeakerAccess")
     public void updateFrameCoordinates() {
-        frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromArraysBuilder //
                 .withFrameNo(frameCoordinates.getFrameNo()) //
                 .withAtomsArray(this.atoms) //
-                .buildFromArray();
+                .build();
     }
 
     public void removeFreeAtoms(GmxAtom... atoms) {

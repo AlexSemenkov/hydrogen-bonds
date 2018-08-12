@@ -36,10 +36,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(100) //
-                .buildFromScratch();
+                .build();
 
         Assert.assertNotEquals(frameCoordinates.getCoordinates()[0][0], frameCoordinates.getCoordinates()[799999][0]);
         Assert.assertNotEquals(frameCoordinates.getCoordinates()[0][1], frameCoordinates.getCoordinates()[799999][1]);
@@ -55,10 +55,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(110) //
-                .buildFromScratch();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 110, 2000);
     }
@@ -71,17 +71,17 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(111) //
-                .buildFromScratch();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 111, 6000);
     }
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameCoordinatesFromScratchWithoutFrameStructure() {
-        frameCoordinatesBuilderSupplier.get().withFrameNo(110).buildFromScratch();
+        frameCoordinatesFromScratchBuilderSupplier.get().withFrameNo(110).build();
     }
 
     // ======== TEST FRAME STRUCTURE FROM GRO FILE ========
@@ -90,10 +90,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
     public void testFrameCoordinatesFromGroFile() {
         List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(123) //
-                .buildFromGroFile();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 123, 872);
         verifyCoordinates(frameCoordinates.getCoordinates()[0], 3.804f, 2.449f, 4.279f);
@@ -104,10 +104,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
     public void testFrameCoordinatesFromGroFileWithoutResidues() {
         List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_ARGON_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(987) //
-                .buildFromGroFile();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 987, 870);
         verifyCoordinates(frameCoordinates.getCoordinates()[0], 2.339f, 4.123f, 4.722f);
@@ -118,10 +118,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
     public void testFrameCoordinatesFromGroFileWithoutFreeAtoms() {
         List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(5000) //
-                .buildFromGroFile();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 5000, 6);
         verifyCoordinates(frameCoordinates.getCoordinates()[0], 3.970f, 4.455f, 4.689f);
@@ -130,7 +130,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameCoordinatesFromGroFileWithoutGroFileAtomLines() {
-        frameCoordinatesBuilderSupplier.get().withFrameNo(110).buildFromGroFile();
+        frameCoordinatesFromGroFileBuilderSupplier.get().withFrameNo(110).build();
     }
 
     // ======== TEST FRAME STRUCTURE FROM ARRAYS ========
@@ -146,10 +146,10 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
             atoms[i + 1] = atomFactory.get(GmxAtomH.class, "H", i + 1, hCoordinates);
         });
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromArraysBuilderSupplier.get() //
                 .withAtomsArray(atoms) //
                 .withFrameNo(2) //
-                .buildFromArray();
+                .build();
 
         verifyFrameCoordinates(frameCoordinates, 2, 200000);
         verifyCoordinates(frameCoordinates.getCoordinates()[0], 0.73096776f, 0.831441f, 0.24053639f);
@@ -158,7 +158,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameCoordinatesFromAtomsArrayWithoutArray() {
-        frameCoordinatesBuilderSupplier.get().withFrameNo(110).buildFromArray();
+        frameCoordinatesFromArraysBuilderSupplier.get().withFrameNo(110).build();
     }
 
     private void verifyFrameCoordinates(GmxFrameCoordinates frameCoordinates, int frameNo, int length) {
