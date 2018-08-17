@@ -23,7 +23,7 @@ import com.asemenkov.waterinargon.GmxResidueH2O;
 @Test
 public class GmxWaterDimerExperiment extends GmxAbstractTest {
 
-    private static final Path WATER_DIMER = Paths.get("D:", "gromacs", "water-dimer");
+    private static final Path WATER_DIMER = Paths.get("src", "test", "resources", "dont-commit");
     private static final String WATER_DIMER_GRO = "water-dimer.gro";
 
     @Test
@@ -67,5 +67,43 @@ public class GmxWaterDimerExperiment extends GmxAbstractTest {
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
         groFileReaderAndWriter.writeGroFile(frame, WATER_DIMER, WATER_DIMER_GRO);
+    }
+
+    @Test
+    public void setupWaterDimerInThousandMolecules() {
+        Path path = Paths.get("experiments", "water-dimer-1000-H2O", "common");
+        String groFile = "water-dimer-1000.gro";
+
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+                .withDescription("") //
+                .withBox(new float[] { 7.f, 7.f, 7.f }) //
+                .withResidues("SOL", 1000) //
+                .build();
+
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
+                .withFrameNo(1) //
+                .withFrameStructure(frameStructure) //
+                .build();
+
+        GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
+        GmxResidue water1 = frame.getNeighbourResidue(new float[] { 3.5f, 3.5f, 3.5f }, 0);
+        GmxResidue water2 = frame.getNeighbourResidue(water1.getPivotAtom().getCoordinates(), 1);
+        water2.moveTo(water1.getPivotAtom().getCoordinates());
+        water2.shiftZ(0.3f);
+
+        frame.reindexAtoms();
+        frame.reindexResidues();
+        frame.setDescription(String.format("Water Dimer: %d::%d", water1.getResidueNo(), water2.getResidueNo()));
+
+        GmxAnglePredicate predicate1 = anglePredicateFactory.get(water1.getDonorAtoms()[0], water1.getAcceptorAtom(), water2.getAcceptorAtom(), -1.0, 0.01);
+        boolean result1 = water1.rotateWhile(predicate1);
+        Assert.assertTrue(result1, "Rotation of the 1st molecule H2O failed.");
+
+        GmxAnglePredicate predicate2 = anglePredicateFactory.get(water2.getAcceptorAtom(), water2.getDonorAtoms()[0], water1.getDonorAtoms()[0], -0.616, 0.1);
+        GmxAnglePredicate predicate3 = anglePredicateFactory.get(water2.getAcceptorAtom(), water2.getDonorAtoms()[1], water1.getDonorAtoms()[0], -0.616, 0.1);
+        boolean result2 = water2.rotateWhile(predicate2, predicate3);
+        Assert.assertTrue(result2, "Rotation of the 2nd molecule H2O failed.");
+
+        groFileReaderAndWriter.writeGroFile(frame, path, groFile);
     }
 }
