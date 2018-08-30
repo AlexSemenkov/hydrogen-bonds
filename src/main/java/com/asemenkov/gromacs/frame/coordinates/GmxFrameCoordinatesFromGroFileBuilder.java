@@ -1,6 +1,6 @@
 package com.asemenkov.gromacs.frame.coordinates;
 
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.utils.Logger;
 

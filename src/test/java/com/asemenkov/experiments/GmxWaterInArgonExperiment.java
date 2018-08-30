@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.tests.GmxAbstractTest;
 import com.asemenkov.waterinargon.GmxResidueH2O;
@@ -36,11 +36,11 @@ public class GmxWaterInArgonExperiment extends GmxAbstractTest {
 
     @BeforeMethod
     public void buildFrame() {
-        List<GmxGroFileAtomLine> groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_ARGON_GRID);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_GRID);
 
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
-                .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_ARGON_GRID)) //
-                .withBox(groFileReaderAndWriter.readGroFileBox(GRO_ARGON_GRID)) //
+                .withDescription(groFileReader.readGroFileDescription(GRO_ARGON_GRID)) //
+                .withBox(groFileReader.readGroFileBox(GRO_ARGON_GRID)) //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
@@ -57,7 +57,7 @@ public class GmxWaterInArgonExperiment extends GmxAbstractTest {
         GmxAtom atom = frame.getAtoms()[362];
         GmxAtom[] atoms = frame.getAtomsSortedByDistanceToPoint(atom.getCoordinates());
         frame.replaceAtomsWithResidues(GmxResidueH2O.class, Arrays.copyOf(atoms, 13));
-        groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_IN_ARGON, WATER_13_STEP_0);
+        groFileWriter.writeGroFile(frame, GRO_WATER_IN_ARGON, WATER_13_STEP_0);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class GmxWaterInArgonExperiment extends GmxAbstractTest {
         GmxAtom[] replace = new GmxAtom[] { atoms[0], atoms[13], atoms[14], atoms[15], atoms[16], atoms[19], atoms[21] };
 
         frame.replaceAtomsWithResidues(GmxResidueH2O.class, replace);
-        groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_IN_ARGON, WATER_7_STEP_1);
+        groFileWriter.writeGroFile(frame, GRO_WATER_IN_ARGON, WATER_7_STEP_1);
     }
 
     @Test(enabled = false)

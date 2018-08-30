@@ -6,13 +6,14 @@ import java.util.function.Supplier;
 
 import com.asemenkov.gromacs.frame.coordinates.*;
 import com.asemenkov.gromacs.frame.structure.*;
+import com.asemenkov.gromacs.io.gro.GmxGroFileReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
-import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
+import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
 import com.asemenkov.gromacs.io.config.GmxIoConfig;
 import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
 import com.asemenkov.gromacs.particles.GmxAnglePredicate;
@@ -38,7 +39,9 @@ public abstract class GmxAbstractTest extends AbstractTestNGSpringContextTests {
     protected static final Path GRO_WATER_PATH = Paths.get("src", "test", "resources", "water.gro");
 
     protected @Autowired GmxXtcFileNativeReader xtcFileNativeReader;
-    protected @Autowired GmxGroFileReaderAndWriter groFileReaderAndWriter;
+    protected @Autowired GmxGroFileWriter groFileWriter;
+    protected @Autowired GmxGroFileReader groFileReader;
+
 
     protected @Autowired Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier;
     protected @Autowired Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier;

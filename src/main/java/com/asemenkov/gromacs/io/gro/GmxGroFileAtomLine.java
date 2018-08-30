@@ -1,4 +1,4 @@
-package com.asemenkov.gromacs.io;
+package com.asemenkov.gromacs.io.gro;
 
 import static com.asemenkov.utils.RegexPatterns.*;
 

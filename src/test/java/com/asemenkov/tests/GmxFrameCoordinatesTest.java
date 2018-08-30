@@ -12,8 +12,8 @@ import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
 import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
-import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.waterinargon.GmxAtomH;
 import com.asemenkov.waterinargon.GmxAtomO;
@@ -88,7 +88,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromGroFile() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
@@ -102,7 +102,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromGroFileWithoutResidues() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_PATH);
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //
@@ -116,7 +116,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromGroFileWithoutFreeAtoms() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_PATH);
 
         GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
                 .withGroFileAtomLines(groFileAtomLines) //

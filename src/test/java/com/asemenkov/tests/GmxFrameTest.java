@@ -18,7 +18,7 @@ import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 
@@ -59,11 +59,11 @@ public class GmxFrameTest extends GmxAbstractTest {
         water = (GmxResidueH2O) residueFactory.get(GmxResidueH2O.class, 1, atoms);
         argon = (GmxAtomAr) atomFactory.get(GmxAtomAr.class, "Ar", 0, new float[] { 1.1f, 1.1f, 1.1f });
 
-        groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
-                .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
-                .withBox(groFileReaderAndWriter.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
+                .withDescription(groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
+                .withBox(groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
@@ -93,7 +93,7 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "without-residues.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "without-residues.gro");
 
         verifyFrame(frame, description, 1, BOX);
         verifyFrameAtoms(frame, 100, "Argon", "Argon");
@@ -103,7 +103,7 @@ public class GmxFrameTest extends GmxAbstractTest {
     @Test
     public void testFrameInitializationFromGroFile() {
         String description = "Test Frame Initialization From Gro File";
-        groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription(description) //
@@ -117,7 +117,7 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-gro-file.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-gro-file.gro");
 
         verifyFrame(frame, description, 2, BOX);
         verifyFrameAtoms(frame, 872, "Argon", "Hydrogen");
@@ -128,7 +128,7 @@ public class GmxFrameTest extends GmxAbstractTest {
     @Test
     public void testFrameInitializationFromXtcFile() {
         String description = "Test Frame Initialization From Xtc File";
-        groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription(description) //
@@ -141,7 +141,7 @@ public class GmxFrameTest extends GmxAbstractTest {
         xtcFileNativeReader.closeXtcFile();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-xtc-file.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-xtc-file.gro");
 
         verifyFrame(frame, description, 1, BOX);
         verifyFrameAtoms(frame, 872, "Argon", "Hydrogen");
@@ -166,7 +166,7 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-scratch.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-scratch.gro");
 
         verifyFrame(frame, description, 4, BOX);
         verifyFrameAtoms(frame, 250, "Argon", "Hydrogen");
@@ -190,7 +190,7 @@ public class GmxFrameTest extends GmxAbstractTest {
                 .build();
 
         frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-arrays.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "from-arrays.gro");
 
         verifyFrame(frame, description, 5, BOX);
         verifyFrameAtoms(frame, 872, "Argon", "Hydrogen");
@@ -284,7 +284,7 @@ public class GmxFrameTest extends GmxAbstractTest {
     public void testAtomsOutOfBoxRemoval() {
         frame.setBox(new float[] { 4.5f, 4.5f, 4.5f });
         frame.removeAtomsOutOfBox();
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "out-of-box-removal.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "out-of-box-removal.gro");
 
         Assert.assertEquals(frame.getAtomsNum(), 190, "Wrong number of atoms after removal.");
         Assert.assertEquals(frame.getResiduesNum(), 0, "Wrong number of residues after removal.");
@@ -297,7 +297,7 @@ public class GmxFrameTest extends GmxAbstractTest {
     @Test
     public void testBoxMultiplicationByIntegers() {
         frame.multiplyBox(3, 3, 3);
-        groFileReaderAndWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "after-multiplication.gro");
+        groFileWriter.writeGroFile(frame, PATH_GRO_FROM_TESTS, "after-multiplication.gro");
 
         verifyFrame(frame, "Ar+SOL", 1, new float[] { 21.f, 21.f, 21.f });
         verifyFrameAtoms(frame, 23544, "Argon", "Hydrogen");

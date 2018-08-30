@@ -1,11 +1,11 @@
 package com.asemenkov.gromacs.io.config;
 
 import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
+import com.asemenkov.gromacs.io.gro.GmxGroFileReader;
+import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -17,8 +17,14 @@ public class GmxIoConfig {
 
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-    public GmxGroFileReaderAndWriter groFileReaderAndWriter() {
-        return new GmxGroFileReaderAndWriter();
+    public GmxGroFileReader groFileReader() {
+        return new GmxGroFileReader();
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    public GmxGroFileWriter groFileWriter() {
+        return new GmxGroFileWriter();
     }
 
     @Bean

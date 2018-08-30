@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
 import com.asemenkov.tests.GmxAbstractTest;
 import com.asemenkov.utils.DecimalFormatter;
 import com.asemenkov.utils.FileUtils;
@@ -30,11 +30,11 @@ public class GmxArgonGridSpaceExperiment extends GmxAbstractTest {
 
     @Test
     public void findSpaceBetweenArgonAtoms() {
-        List<GmxGroFileAtomLine> groFileAtomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_ARGON_GRID);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_GRID);
 
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
-                .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_ARGON_GRID)) //
-                .withBox(groFileReaderAndWriter.readGroFileBox(GRO_ARGON_GRID)) //
+                .withDescription(groFileReader.readGroFileDescription(GRO_ARGON_GRID)) //
+                .withBox(groFileReader.readGroFileBox(GRO_ARGON_GRID)) //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 import com.asemenkov.utils.FileUtils;
@@ -70,10 +70,10 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
 
     @Test
     public void testGroFileReading() {
-        List<GmxGroFileAtomLine> atomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
-        String description = groFileReaderAndWriter.readGroFileDescription(GRO_WATER_IN_ARGON_PATH);
-        Integer atomsNum = groFileReaderAndWriter.readGroFileAtomsNum(GRO_WATER_IN_ARGON_PATH);
-        float[] box = groFileReaderAndWriter.readGroFileBox(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> atomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        String description = groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH);
+        Integer atomsNum = groFileReader.readGroFileAtomsNum(GRO_WATER_IN_ARGON_PATH);
+        float[] box = groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH);
 
         Logger.log("GRO file description: " + description);
         Logger.log("GRO file atomsNum: " + atomsNum);
@@ -90,10 +90,10 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
 
     @Test
     public void testGroFileWriting() {
-        List<GmxGroFileAtomLine> atomLines = groFileReaderAndWriter.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> atomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
-                .withDescription(groFileReaderAndWriter.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
-                .withBox(groFileReaderAndWriter.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
+                .withDescription(groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
+                .withBox(groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(atomLines) //
                 .build();
 
@@ -103,12 +103,12 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
                 .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
-        Path path = groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_IN_ARGON_PATH.getParent(), "test-H2O-in-Ar");
+        Path path = groFileWriter.writeGroFile(frame, GRO_WATER_IN_ARGON_PATH.getParent(), "test-H2O-in-Ar");
 
-        atomLines = groFileReaderAndWriter.readGroFileAtomLines(path);
-        String description = groFileReaderAndWriter.readGroFileDescription(path);
-        Integer atomsNum = groFileReaderAndWriter.readGroFileAtomsNum(path);
-        float[] box = groFileReaderAndWriter.readGroFileBox(path);
+        atomLines = groFileReader.readGroFileAtomLines(path);
+        String description = groFileReader.readGroFileDescription(path);
+        Integer atomsNum = groFileReader.readGroFileAtomsNum(path);
+        float[] box = groFileReader.readGroFileBox(path);
         FileUtils.deleteFileIfExists(path);
 
         Logger.log("test-H2O-in-Ar GRO file description: " + description);

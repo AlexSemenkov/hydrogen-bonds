@@ -169,7 +169,7 @@ public class GmxWaterTrimerExperiment extends GmxAbstractTest {
                 .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, GRO_WATER_TRIMER, fileNAme);
+        groFileWriter.writeGroFile(frame, GRO_WATER_TRIMER, fileNAme);
     }
 
 }

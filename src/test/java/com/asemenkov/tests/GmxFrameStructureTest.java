@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 import com.asemenkov.gromacs.frame.exceptions.GmxFrameException;
 import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.io.GmxGroFileAtomLine;
-import com.asemenkov.gromacs.io.GmxGroFileReaderAndWriter;
+import com.asemenkov.gromacs.io.gro.GmxGroFileAtomLine;
+import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
 import com.asemenkov.gromacs.particles.GmxAtom;
 import com.asemenkov.gromacs.particles.GmxResidue;
 import com.asemenkov.waterinargon.GmxAtomAr;
@@ -99,7 +99,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test
     public void testFrameStructureFromGroFile() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription("From .gro file") //
@@ -116,7 +116,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test
     public void testFrameStructureFromGroFileWithoutResidue() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_PATH);
 
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription("From .gro file") //
@@ -135,7 +135,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test
     public void testFrameStructureFromGroFileWithoutFreeAtoms() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_PATH);
 
         GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription("From .gro file") //
@@ -152,7 +152,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameStructureFromGroFileWithoutBox() {
-        List<GmxGroFileAtomLine> groFileAtomLines = new GmxGroFileReaderAndWriter().readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
         frameStructureFromGroFileBuilderSupplier.get() //
                 .withDescription("From .gro file") //

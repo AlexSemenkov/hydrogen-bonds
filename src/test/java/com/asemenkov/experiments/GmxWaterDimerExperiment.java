@@ -66,7 +66,7 @@ public class GmxWaterDimerExperiment extends GmxAbstractTest {
                 .build();
 
         GmxFrame frame = frameFactory.get(frameStructure, frameCoordinates);
-        groFileReaderAndWriter.writeGroFile(frame, WATER_DIMER, WATER_DIMER_GRO);
+        groFileWriter.writeGroFile(frame, WATER_DIMER, WATER_DIMER_GRO);
     }
 
     @Test
@@ -104,6 +104,6 @@ public class GmxWaterDimerExperiment extends GmxAbstractTest {
         boolean result2 = water2.rotateWhile(predicate2, predicate3);
         Assert.assertTrue(result2, "Rotation of the 2nd molecule H2O failed.");
 
-        groFileReaderAndWriter.writeGroFile(frame, path, groFile);
+        groFileWriter.writeGroFile(frame, path, groFile);
     }
 }
