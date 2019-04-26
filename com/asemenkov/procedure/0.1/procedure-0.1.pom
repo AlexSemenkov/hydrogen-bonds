@@ -10,13 +10,18 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>gromacs</artifactId>
+    <artifactId>procedure</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.asemenkov</groupId>
             <artifactId>utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.asemenkov</groupId>
+            <artifactId>gromacs</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
