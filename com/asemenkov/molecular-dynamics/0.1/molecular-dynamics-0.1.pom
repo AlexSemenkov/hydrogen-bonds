@@ -31,9 +31,6 @@
 
         <github.global.server>github</github.global.server>
         <github.maven-plugin>0.12</github.maven-plugin>
-        <!--github.host>github.com</github.host>
-        <github.server.id>github</github.server.id>
-        <github.site.path>${project.version}</github.site.path-->
     </properties>
 
     <url>https://github.com/AlexSemenkov/molecular-dynamics</url>
@@ -142,11 +139,6 @@
                     </includes>
                     <repositoryName>molecular-dynamics</repositoryName>
                     <repositoryOwner>AlexSemenkov</repositoryOwner>
-                    <!--message>Creating site for ${project.url} version ${project.version}</message>
-                    <host>${github.host}</host>
-                    <server>${github.server.id}</server>
-                    <path>${github.site.path}</path-->
-                    <merge>true</merge>
                 </configuration>
                 <executions>
                     <execution>
