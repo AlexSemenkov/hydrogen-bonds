@@ -26,6 +26,5 @@
 hs_err_pid*
 
 # output files
-test/resources/gro-from-tests/*.*
-*.gro
+gro-from-tests/
 
