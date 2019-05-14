@@ -1,4 +1,4 @@
-package com.asemenkov.procedure.main;
+package com.asemenkov.procedure.simulation;
 
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
@@ -53,6 +53,13 @@ public abstract class AbstractProcedure {
 
     /**
      * @implSpec t1 -- (Class) residue class
+     * @implSpec t2 -- (Integer) residue no
+     * @implSpec t3 -- (GmxAtom[]) residue atoms
+     */
+    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueFactory;
+
+    /**
+     * @implSpec t1 -- (Class) residue class
      * @implSpec t2 -- (float[]) pivot atom coordinates
      */
     protected @Autowired Factories.DuoFactory<GmxAtom[], Class<? extends GmxResidue>, float[]> residueAtomsFactory;
@@ -62,7 +69,14 @@ public abstract class AbstractProcedure {
      * @implSpec t2 -- (Integer) residue no
      * @implSpec t3 -- (GmxAtom[]) residue atoms
      */
-    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueFactory;
+    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueByAtomsFactory;
+
+    /**
+     * @implSpec t1 -- (Class) residue class
+     * @implSpec t2 -- (Integer) residue no
+     * @implSpec t3 -- (float[]) residue pivot point coordinates
+     */
+    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, float[]> residueByCoordsFactory;
 
     /**
      * @implSpec t1 -- (Class) residue class
