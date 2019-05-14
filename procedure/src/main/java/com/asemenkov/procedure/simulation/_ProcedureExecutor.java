@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  * @since Aug 31, 2018
  */
 @SpringBootApplication(scanBasePackages = "com.asemenkov.gromacs")
-public class ProcedureExecutor {
+public class _ProcedureExecutor {
 
 
     private static void process(Process process) {
@@ -29,6 +29,6 @@ public class ProcedureExecutor {
         System.out.println("Hello from gromacs-java");
         Process p = Runtime.getRuntime().exec("gmx -version");
         new Thread(() -> process(p)).start();
-        SpringApplication.run(ProcedureExecutor.class, args);
+        SpringApplication.run(_ProcedureExecutor.class, args);
     }
 }

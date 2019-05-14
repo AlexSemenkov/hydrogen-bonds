@@ -1,5 +1,6 @@
 package com.asemenkov.procedure.simulation;
 
+import com.asemenkov.command.config.CmdGmxCommandsConfig;
 import com.asemenkov.gromacs.frame.GmxFrame;
 import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
 import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
  * @author asemenkov
  * @since Sep 07, 2018
  */
-@Import({ ProceduresConfig.class, GmxFrameConfig.class, GmxIoConfig.class })
+@Import({ ProceduresConfig.class, CmdGmxCommandsConfig.class, GmxFrameConfig.class, GmxIoConfig.class })
 public abstract class AbstractProcedure {
 
     protected @Autowired GmxXtcFileNativeReader xtcFileNativeReader;

@@ -24,6 +24,11 @@
             <artifactId>gromacs</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.asemenkov</groupId>
+            <artifactId>command</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
