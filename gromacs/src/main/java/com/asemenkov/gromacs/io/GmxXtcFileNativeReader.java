@@ -39,6 +39,8 @@ public class GmxXtcFileNativeReader {
     private native int getNumberOfAtomsC();
 
     public void openXtcFile(Path xtcFilePath) {
+        FileUtils.verifyFileExists(xtcFilePath);
+        FileUtils.verifyExtension(xtcFilePath, ".xtc");
         if (isBusy) throw new GmxIoException("The previous .xtc file is still opened.");
         else isBusy = openXtcFileC(xtcFilePath.toAbsolutePath().toString());
     }

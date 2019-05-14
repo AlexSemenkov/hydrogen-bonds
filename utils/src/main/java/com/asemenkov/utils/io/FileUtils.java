@@ -81,19 +81,24 @@ public class FileUtils {
         return file.exists();
     }
 
-    public static void verifyExtension(Path path, String extension) {
-        checkFile(path);
+    public static void verifyFileExists(Path path) {
+        if (!fileExists(path)) throw new FileUtilsException("File not found: " + path);
 
-        String lower = extension.toLowerCase();
-        if (!lower.startsWith(".")) lower = "." + lower;
+        File file = path.toFile();
 
-        if (!path.toString().toLowerCase().endsWith(lower)) //
-            throw new RuntimeException("Extension of " + path + " is not as expected - " + extension);
+        if (!file.isFile()) throw new FileUtilsException("It's not a file: " + path);
+    }
+
+    public static void verifyExtension(Path path, String... extensions) {
+        if (Arrays.stream(extensions).map(String::toLowerCase) //
+                .map(extension -> extension.replaceFirst("^(?!\\.)", ".")) //
+                .noneMatch(extension -> path.toString().toLowerCase().endsWith(extension)))
+            throw new FileUtilsException("Extension of " + path + " not in " + Arrays.toString(extensions));
     }
 
     public static void copyFile(Path from, Path to) {
-        checkFile(from);
-        checkFile(to);
+        verifyFileExists(from);
+        verifyFileExists(to);
 
         try {
             Files.copy(from, to);
@@ -103,8 +108,8 @@ public class FileUtils {
     }
 
     public static void moveFile(Path from, Path to) {
-        checkFile(from);
-        checkFile(to);
+        verifyFileExists(from);
+        verifyFileExists(to);
 
         try {
             Files.move(from, to);
@@ -114,7 +119,7 @@ public class FileUtils {
     }
 
     public static void renameFile(Path path, String newName) {
-        checkFile(path);
+        verifyFileExists(path);
 
         try {
             Files.move(path, path.resolveSibling(newName));
@@ -134,11 +139,12 @@ public class FileUtils {
     // ======== FILE READING ========
 
     public static List<String> readWholeFile(Path path) {
-        checkFile(path);
+        verifyFileExists(path);
 
         if (!path.toFile().canRead()) throw new FileUtilsException("File cannot be read: " + path);
 
-        if (path.toFile().length() > 512 * 1024 * 1024) throw new FileUtilsException("File is to large to be read at a time: " + path);
+        if (path.toFile().length() > 512 * 1024 * 1024) throw new FileUtilsException(
+                "File is to large to be read at a time: " + path);
 
         try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             return reader.lines().collect(Collectors.toList());
@@ -148,7 +154,7 @@ public class FileUtils {
     }
 
     public static BufferedReader getBufferedReader(Path path) {
-        checkFile(path);
+        verifyFileExists(path);
 
         if (!path.toFile().canRead()) throw new FileUtilsException("File cannot be read: " + path);
 
@@ -175,7 +181,8 @@ public class FileUtils {
         }
     }
 
-    public static BufferedWriter getBufferedWriter(Path path, boolean createFileIfItDoesntExist, boolean eraseDataIfFileExists) {
+    public static BufferedWriter getBufferedWriter(Path path, boolean createFileIfItDoesntExist,
+            boolean eraseDataIfFileExists) {
 
         if (path.toFile().exists()) {
             if (!path.toFile().canWrite()) throw new FileUtilsException("File cannot be written: " + path);
@@ -206,14 +213,6 @@ public class FileUtils {
     }
 
     // ======== SUPPORT METHODS ========
-
-    private static void checkFile(Path path) {
-        if (!fileExists(path)) throw new FileUtilsException("File not found: " + path);
-
-        File file = path.toFile();
-
-        if (!file.isFile()) throw new FileUtilsException("It's not a file: " + path);
-    }
 
     private static void checkDir(Path path) {
         if (!fileExists(path)) throw new FileUtilsException("Directory not found: %s" + path);

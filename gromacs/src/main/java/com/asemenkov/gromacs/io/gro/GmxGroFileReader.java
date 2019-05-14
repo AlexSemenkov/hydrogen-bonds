@@ -21,17 +21,20 @@ public class GmxGroFileReader {
     private static final int ATOMS_START_INDEX = 2;
 
     public String readGroFileDescription(Path groFile) {
+        FileUtils.verifyFileExists(groFile);
         FileUtils.verifyExtension(groFile, EXTENSION);
         return FileUtils.readWholeFile(groFile).get(DESCRIPTION_INDEX);
     }
 
     public Integer readGroFileAtomsNum(Path groFile) {
+        FileUtils.verifyFileExists(groFile);
         FileUtils.verifyExtension(groFile, EXTENSION);
         List<String> lines = FileUtils.readWholeFile(groFile);
         return Integer.valueOf(lines.get(ATOMS_NO_INDEX).trim());
     }
 
     public float[] readGroFileBox(Path groFile) {
+        FileUtils.verifyFileExists(groFile);
         FileUtils.verifyExtension(groFile, EXTENSION);
         List<String> lines = FileUtils.readWholeFile(groFile);
         Integer atomsNum = Integer.valueOf(lines.get(ATOMS_NO_INDEX).trim());
@@ -39,6 +42,7 @@ public class GmxGroFileReader {
     }
 
     public List<GmxGroFileAtomLine> readGroFileAtomLines(Path groFile) {
+        FileUtils.verifyFileExists(groFile);
         FileUtils.verifyExtension(groFile, EXTENSION);
         List<String> lines = FileUtils.readWholeFile(groFile);
         Integer atomsNum = Integer.valueOf(lines.get(ATOMS_NO_INDEX).trim());
