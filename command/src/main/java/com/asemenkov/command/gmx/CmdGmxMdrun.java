@@ -25,7 +25,7 @@ import java.nio.file.Path;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class CmdGmxMdrun extends CmdGmxAbstractCommand {
+public class CmdGmxMdrun extends CmdGmxAbstractCommand<CmdGmxMdrun> {
 
     public CmdGmxMdrun() {
         super("mdrun");
@@ -38,9 +38,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Portable xdr run input file
      */
     public CmdGmxMdrun withXdrInputFile(Path s) {
-        FileUtils.verifyFileExists(s);
+        FileUtils.verifyFileInDirExists(s, simulationPath);
         FileUtils.verifyExtension(s, ".tpr");
-        commandsMap.put("-s", s.toString());
+        commandsMap.put("-s", s.getFileName().toString());
         return this;
     }
 
@@ -49,9 +49,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Checkpoint file
      */
     public CmdGmxMdrun withCheckpointInputFile(Path cpi) {
-        FileUtils.verifyFileExists(cpi);
+        FileUtils.verifyFileInDirExists(cpi, simulationPath);
         FileUtils.verifyExtension(cpi, ".cpt");
-        commandsMap.put("-cpi", cpi.toString());
+        commandsMap.put("-cpi", cpi.getFileName().toString());
         return this;
     }
 
@@ -60,9 +60,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * xvgr/xmgr file
      */
     public CmdGmxMdrun withTableInputFile(Path table) {
-        FileUtils.verifyFileExists(table);
+        FileUtils.verifyFileInDirExists(table, simulationPath);
         FileUtils.verifyExtension(table, ".xvg");
-        commandsMap.put("-table", table.toString());
+        commandsMap.put("-table", table.getFileName().toString());
         return this;
     }
 
@@ -71,9 +71,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * xvgr/xmgr file
      */
     public CmdGmxMdrun withTablepInputFile(Path tablep) {
-        FileUtils.verifyFileExists(tablep);
+        FileUtils.verifyFileInDirExists(tablep, simulationPath);
         FileUtils.verifyExtension(tablep, ".xvg");
-        commandsMap.put("-tablep", tablep.toString());
+        commandsMap.put("-tablep", tablep.getFileName().toString());
         return this;
     }
 
@@ -82,9 +82,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * xvgr/xmgr file
      */
     public CmdGmxMdrun withTablebInputFile(Path tableb) {
-        FileUtils.verifyFileExists(tableb);
+        FileUtils.verifyFileInDirExists(tableb, simulationPath);
         FileUtils.verifyExtension(tableb, ".xvg");
-        commandsMap.put("-tableb", tableb.toString());
+        commandsMap.put("-tableb", tableb.getFileName().toString());
         return this;
     }
 
@@ -93,9 +93,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Trajectory: xtc trr cpt gro g96 pdb tng
      */
     public CmdGmxMdrun withRerunTrajectoryInputFile(Path rerun) {
-        FileUtils.verifyFileExists(rerun);
+        FileUtils.verifyFileInDirExists(rerun, simulationPath);
         FileUtils.verifyExtension(rerun, ".xtc", ".trr", ".cpt", ".gro", ".pdb", ".tng");
-        commandsMap.put("-rerun", rerun.toString());
+        commandsMap.put("-rerun", rerun.getFileName().toString());
         return this;
     }
 
@@ -104,9 +104,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * ED sampling input
      */
     public CmdGmxMdrun withEdSamplingInputFile(Path ei) {
-        FileUtils.verifyFileExists(ei);
+        FileUtils.verifyFileInDirExists(ei, simulationPath);
         FileUtils.verifyExtension(ei, ".edi");
-        commandsMap.put("-ei", ei.toString());
+        commandsMap.put("-ei", ei.getFileName().toString());
         return this;
     }
 
@@ -124,9 +124,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * xvgr/xmgr file
      */
     public CmdGmxMdrun withAwhInitInputFile(Path awh) {
-        FileUtils.verifyFileExists(awh);
+        FileUtils.verifyFileInDirExists(awh, simulationPath);
         FileUtils.verifyExtension(awh, ".xvg");
-        commandsMap.put("-awh", awh.toString());
+        commandsMap.put("-awh", awh.getFileName().toString());
         return this;
     }
 
@@ -135,9 +135,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Generic data file
      */
     public CmdGmxMdrun withMembedDataInputFile(Path membed) {
-        FileUtils.verifyFileExists(membed);
+        FileUtils.verifyFileInDirExists(membed, simulationPath);
         FileUtils.verifyExtension(membed, ".dat");
-        commandsMap.put("-membed", membed.toString());
+        commandsMap.put("-membed", membed.getFileName().toString());
         return this;
     }
 
@@ -146,9 +146,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Topology file
      */
     public CmdGmxMdrun withMembedTopologyInputFile(Path mp) {
-        FileUtils.verifyFileExists(mp);
+        FileUtils.verifyFileInDirExists(mp, simulationPath);
         FileUtils.verifyExtension(mp, ".top");
-        commandsMap.put("-mp", mp.toString());
+        commandsMap.put("-mp", mp.getFileName().toString());
         return this;
     }
 
@@ -157,9 +157,9 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Index file
      */
     public CmdGmxMdrun withMembedIndexInputFile(Path mn) {
-        FileUtils.verifyFileExists(mn);
+        FileUtils.verifyFileInDirExists(mn, simulationPath);
         FileUtils.verifyExtension(mn, ".ndx");
-        commandsMap.put("-mn", mn.toString());
+        commandsMap.put("-mn", mn.getFileName().toString());
         return this;
     }
 
@@ -171,7 +171,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withFullPrecisionTrajectoryOutputFile(Path o) {
         FileUtils.verifyExtension(o, ".trr", ".cpt", ".tng");
-        commandsMap.put("-o", o.toString());
+        commandsMap.put("-o", o.getFileName().toString());
         return this;
     }
 
@@ -181,7 +181,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withCompressedTrajectoryOutputFile(Path x) {
         FileUtils.verifyExtension(x, ".xtc", ".tng");
-        commandsMap.put("-x", x.toString());
+        commandsMap.put("-x", x.getFileName().toString());
         return this;
     }
 
@@ -191,7 +191,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withCheckpointOutputFile(Path cpo) {
         FileUtils.verifyExtension(cpo, ".cpt");
-        commandsMap.put("-cpo", cpo.toString());
+        commandsMap.put("-cpo", cpo.getFileName().toString());
         return this;
     }
 
@@ -201,7 +201,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withStructureOutputFile(Path c) {
         FileUtils.verifyExtension(c, ".gro", ".g96", ".pdb", ".brk", ".ent", ".esp");
-        commandsMap.put("-c", c.toString());
+        commandsMap.put("-c", c.getFileName().toString());
         return this;
     }
 
@@ -211,7 +211,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withEnergyOutputFile(Path e) {
         FileUtils.verifyExtension(e, ".edr");
-        commandsMap.put("-e", e.toString());
+        commandsMap.put("-e", e.getFileName().toString());
         return this;
     }
 
@@ -221,7 +221,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withMdLogOutputFile(Path g) {
         FileUtils.verifyExtension(g, ".log");
-        commandsMap.put("-g", g.toString());
+        commandsMap.put("-g", g.getFileName().toString());
         return this;
     }
 
@@ -231,7 +231,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withDhdlOutputFile(Path dhdl) {
         FileUtils.verifyExtension(dhdl, ".xvg");
-        commandsMap.put("-dhdl", dhdl.toString());
+        commandsMap.put("-dhdl", dhdl.getFileName().toString());
         return this;
     }
 
@@ -241,7 +241,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withFieldOutputFile(Path field) {
         FileUtils.verifyExtension(field, ".xvg");
-        commandsMap.put("-field", field.toString());
+        commandsMap.put("-field", field.getFileName().toString());
         return this;
     }
 
@@ -251,7 +251,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withTpiOutputFile(Path tpi) {
         FileUtils.verifyExtension(tpi, ".xvg");
-        commandsMap.put("-tpi", tpi.toString());
+        commandsMap.put("-tpi", tpi.getFileName().toString());
         return this;
     }
 
@@ -261,7 +261,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withTpiDistOutputFile(Path tpid) {
         FileUtils.verifyExtension(tpid, ".xvg");
-        commandsMap.put("-tpid", tpid.toString());
+        commandsMap.put("-tpid", tpid.getFileName().toString());
         return this;
     }
 
@@ -271,7 +271,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withEdsamOutputFile(Path eo) {
         FileUtils.verifyExtension(eo, ".xvg");
-        commandsMap.put("-eo", eo.toString());
+        commandsMap.put("-eo", eo.getFileName().toString());
         return this;
     }
 
@@ -281,7 +281,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withDeviatieOutputFile(Path devout) {
         FileUtils.verifyExtension(devout, ".xvg");
-        commandsMap.put("-devout", devout.toString());
+        commandsMap.put("-devout", devout.getFileName().toString());
         return this;
     }
 
@@ -291,7 +291,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withRunAverOutputFile(Path runav) {
         FileUtils.verifyExtension(runav, ".xvg");
-        commandsMap.put("-runav", runav.toString());
+        commandsMap.put("-runav", runav.getFileName().toString());
         return this;
     }
 
@@ -301,7 +301,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withPullxOutputFile(Path px) {
         FileUtils.verifyExtension(px, ".xvg");
-        commandsMap.put("-px", px.toString());
+        commandsMap.put("-px", px.getFileName().toString());
         return this;
     }
 
@@ -311,7 +311,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withPullfOutputFile(Path pf) {
         FileUtils.verifyExtension(pf, ".xvg");
-        commandsMap.put("-pf", pf.toString());
+        commandsMap.put("-pf", pf.getFileName().toString());
         return this;
     }
 
@@ -321,7 +321,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withRotationOutputFile(Path ro) {
         FileUtils.verifyExtension(ro, ".xvg");
-        commandsMap.put("-ro", ro.toString());
+        commandsMap.put("-ro", ro.getFileName().toString());
         return this;
     }
 
@@ -331,7 +331,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withRotAnglesOutputFile(Path ra) {
         FileUtils.verifyExtension(ra, ".log");
-        commandsMap.put("-ra", ra.toString());
+        commandsMap.put("-ra", ra.getFileName().toString());
         return this;
     }
 
@@ -341,7 +341,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withRotSlabsLogOutputFile(Path rs) {
         FileUtils.verifyExtension(rs, ".log");
-        commandsMap.put("-rs", rs.toString());
+        commandsMap.put("-rs", rs.getFileName().toString());
         return this;
     }
 
@@ -351,7 +351,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withRotTorqueLogOutputFile(Path rt) {
         FileUtils.verifyExtension(rt, ".log");
-        commandsMap.put("-rt", rt.toString());
+        commandsMap.put("-rt", rt.getFileName().toString());
         return this;
     }
 
@@ -361,7 +361,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withHessianMatrixOutputFile(Path mtx) {
         FileUtils.verifyExtension(mtx, ".mtx");
-        commandsMap.put("-mtx", mtx.toString());
+        commandsMap.put("-mtx", mtx.getFileName().toString());
         return this;
     }
 
@@ -371,7 +371,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withImdForcesOutputFile(Path imdforces) {
         FileUtils.verifyExtension(imdforces, ".xvg");
-        commandsMap.put("-if", imdforces.toString());
+        commandsMap.put("-if", imdforces.getFileName().toString());
         return this;
     }
 
@@ -381,7 +381,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      */
     public CmdGmxMdrun withSwapionsOutputFile(Path swap) {
         FileUtils.verifyExtension(swap, ".xvg");
-        commandsMap.put("-swap", swap.toString());
+        commandsMap.put("-swap", swap.getFileName().toString());
         return this;
     }
 
@@ -510,7 +510,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Check for all bonded interactions with DD
      */
     public CmdGmxMdrun withDomainDecompositionCheck(Boolean ddcheck) {
-        commandsMap.put(ddcheck ? "-ddcheck" : "-noddcheck", "\\b");
+        commandsMap.put(ddcheck ? "-ddcheck" : "-noddcheck", "");
         return this;
     }
 
@@ -585,7 +585,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Optimize PME load between PP/PME ranks or GPU/CPU (only with the Verlet cut-off scheme)
      */
     public CmdGmxMdrun withPmeTuning(Boolean tunepme) {
-        commandsMap.put(tunepme ? "-tunepme" : "-notunepme", "\\b");
+        commandsMap.put(tunepme ? "-tunepme" : "-notunepme", "");
         return this;
     }
 
@@ -612,7 +612,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Be loud and noisy
      */
     public CmdGmxMdrun withLoudAndNoisy(Boolean v) {
-        commandsMap.put(v ? "-v" : "-nov", "\\b");
+        commandsMap.put(v ? "-v" : "-nov", "");
         return this;
     }
 
@@ -630,7 +630,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Try to avoid optimizations that affect binary reproducibility
      */
     public CmdGmxMdrun withReproducibility(Boolean reprod) {
-        commandsMap.put(reprod ? "-reprod" : "-noreprod", "\\b");
+        commandsMap.put(reprod ? "-reprod" : "-noreprod", "");
         return this;
     }
 
@@ -648,7 +648,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * Keep and number checkpoint files
      */
     public CmdGmxMdrun withKeepAndNumberCheckpointFiles(Boolean cpnum) {
-        commandsMap.put(cpnum ? "-cpnum" : "-nocpnum", "\\b");
+        commandsMap.put(cpnum ? "-cpnum" : "-nocpnum", "");
         return this;
     }
 
@@ -658,7 +658,7 @@ public class CmdGmxMdrun extends CmdGmxAbstractCommand {
      * instead of adding the simulation part number to all file names
      */
     public CmdGmxMdrun withAppendToOutputFilesWhenCpt(Boolean append) {
-        commandsMap.put(append ? "-append" : "-noappend", "\\b");
+        commandsMap.put(append ? "-append" : "-noappend", "");
         return this;
     }
 

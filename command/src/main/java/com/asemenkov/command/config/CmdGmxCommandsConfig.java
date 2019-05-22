@@ -14,11 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class CmdGmxCommandsConfig {
 
     @Bean
-    public CmdGmxArgumentsComparator argsComparator() {
-        return new CmdGmxArgumentsComparator();
-    }
-
-    @Bean
     public CmdExecutor commandExecutor() {
         return new CmdExecutor();
     }

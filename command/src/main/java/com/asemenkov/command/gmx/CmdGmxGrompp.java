@@ -26,7 +26,7 @@ import java.nio.file.Path;
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
-public class CmdGmxGrompp extends CmdGmxAbstractCommand {
+public class CmdGmxGrompp extends CmdGmxAbstractCommand<CmdGmxGrompp> {
 
     public CmdGmxGrompp() {
         super("grompp");
@@ -39,9 +39,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * grompp input file with MD parameters
      */
     public CmdGmxGrompp withMdInputFile(Path f) {
-        FileUtils.verifyFileExists(f);
+        FileUtils.verifyFileInDirExists(f, simulationPath);
         FileUtils.verifyExtension(f, ".mdp");
-        commandsMap.put("-f", f.toString());
+        commandsMap.put("-f", f.getFileName().toString());
         return this;
     }
 
@@ -50,9 +50,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Structure file: gro g96 pdb brk ent esp tpr
      */
     public CmdGmxGrompp withStructureInputFile(Path c) {
-        FileUtils.verifyFileExists(c);
+        FileUtils.verifyFileInDirExists(c, simulationPath);
         FileUtils.verifyExtension(c, ".gro", ".g96", ".pdb", ".brk", ".ent", ".esp", ".tpr");
-        commandsMap.put("-c", c.toString());
+        commandsMap.put("-c", c.getFileName().toString());
         return this;
     }
 
@@ -61,9 +61,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Structure file: gro g96 pdb brk ent esp tpr
      */
     public CmdGmxGrompp withRestraintInputFile(Path r) {
-        FileUtils.verifyFileExists(r);
+        FileUtils.verifyFileInDirExists(r, simulationPath);
         FileUtils.verifyExtension(r, ".gro", ".g96", ".pdb", ".brk", ".ent", ".esp", ".tpr");
-        commandsMap.put("-r", r.toString());
+        commandsMap.put("-r", r.getFileName().toString());
         return this;
     }
 
@@ -72,9 +72,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Structure file: gro g96 pdb brk ent esp tpr
      */
     public CmdGmxGrompp withRestraintBInputFile(Path rb) {
-        FileUtils.verifyFileExists(rb);
+        FileUtils.verifyFileInDirExists(rb, simulationPath);
         FileUtils.verifyExtension(rb, ".gro", ".g96", ".pdb", ".brk", ".ent", ".esp", ".tpr");
-        commandsMap.put("-rb", rb.toString());
+        commandsMap.put("-rb", rb.getFileName().toString());
         return this;
     }
 
@@ -83,9 +83,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Index file
      */
     public CmdGmxGrompp withIndexInputFile(Path n) {
-        FileUtils.verifyFileExists(n);
+        FileUtils.verifyFileInDirExists(n, simulationPath);
         FileUtils.verifyExtension(n, ".ndx");
-        commandsMap.put("-n", n.toString());
+        commandsMap.put("-n", n.getFileName().toString());
         return this;
     }
 
@@ -94,9 +94,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Topology file
      */
     public CmdGmxGrompp withTopologyInputFile(Path p) {
-        FileUtils.verifyFileExists(p);
+        FileUtils.verifyFileInDirExists(p, simulationPath);
         FileUtils.verifyExtension(p, ".top");
-        commandsMap.put("-p", p.toString());
+        commandsMap.put("-p", p.getFileName().toString());
         return this;
     }
 
@@ -105,9 +105,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Full precision trajectory: trr cpt tng
      */
     public CmdGmxGrompp withTrajectoryInputFile(Path t) {
-        FileUtils.verifyFileExists(t);
+        FileUtils.verifyFileInDirExists(t, simulationPath);
         FileUtils.verifyExtension(t, ".trr", ".cpt", ".tng");
-        commandsMap.put("-t", t.toString());
+        commandsMap.put("-t", t.getFileName().toString());
         return this;
     }
 
@@ -116,9 +116,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Energy file
      */
     public CmdGmxGrompp withEnergyInputFile(Path e) {
-        FileUtils.verifyFileExists(e);
+        FileUtils.verifyFileInDirExists(e, simulationPath);
         FileUtils.verifyExtension(e, ".edr");
-        commandsMap.put("-e", e.toString());
+        commandsMap.put("-e", e.getFileName().toString());
         return this;
     }
 
@@ -129,9 +129,9 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Full precision trajectory: trr cpt tng
      */
     public CmdGmxGrompp withReferenceFile(Path ref) {
-        FileUtils.verifyFileExists(ref);
+        FileUtils.verifyFileInDirExists(ref, simulationPath);
         FileUtils.verifyExtension(ref, ".trr", ".cpt", ".tng");
-        commandsMap.put("-ref", ref.toString());
+        commandsMap.put("-ref", ref.getFileName().toString());
         return this;
     }
 
@@ -143,7 +143,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      */
     public CmdGmxGrompp withMdOutputFile(Path po) {
         FileUtils.verifyExtension(po, ".mdp");
-        commandsMap.put("-po", po.toString());
+        commandsMap.put("-po", po.getFileName().toString());
         return this;
     }
 
@@ -153,7 +153,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      */
     public CmdGmxGrompp withTopologyOutputFile(Path pp) {
         FileUtils.verifyExtension(pp, ".top");
-        commandsMap.put("-pp", pp.toString());
+        commandsMap.put("-pp", pp.getFileName().toString());
         return this;
     }
 
@@ -163,7 +163,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      */
     public CmdGmxGrompp withRunOutputFile(Path o) {
         FileUtils.verifyExtension(o, ".tpr");
-        commandsMap.put("-o", o.toString());
+        commandsMap.put("-o", o.getFileName().toString());
         return this;
     }
 
@@ -173,7 +173,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      */
     public CmdGmxGrompp withGromos87CoordinateOutputFile(Path imd) {
         FileUtils.verifyExtension(imd, ".gro");
-        commandsMap.put("-imd", imd.toString());
+        commandsMap.put("-imd", imd.getFileName().toString());
         return this;
     }
 
@@ -184,7 +184,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Be loud and noisy
      */
     public CmdGmxGrompp withLoudAndNoisy(Boolean v) {
-        commandsMap.put(v ? "-v" : "-nov", "\\b");
+        commandsMap.put(v ? "-v" : "-nov", "");
         return this;
     }
 
@@ -202,7 +202,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Remove constant bonded interactions with virtual sites
      */
     public CmdGmxGrompp withVirtualSitesRemoval(Boolean rmvsbds) {
-        commandsMap.put(rmvsbds ? "-rmvsbds" : "-normvsbds", "\\b");
+        commandsMap.put(rmvsbds ? "-rmvsbds" : "-normvsbds", "");
         return this;
     }
 
@@ -220,7 +220,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Set parameters for bonded interactions without defaults to zero instead of generating an error
      */
     public CmdGmxGrompp withZero(Boolean zero) {
-        commandsMap.put(zero ? "-zero" : "-nozero", "\\b");
+        commandsMap.put(zero ? "-zero" : "-nozero", "");
         return this;
     }
 
@@ -229,7 +229,7 @@ public class CmdGmxGrompp extends CmdGmxAbstractCommand {
      * Renumber atom types and minimize number of atom types
      */
     public CmdGmxGrompp withRenumbering(Boolean renum) {
-        commandsMap.put(renum ? "-renum" : "-norenum", "\\b");
+        commandsMap.put(renum ? "-renum" : "-norenum", "");
         return this;
     }
 
