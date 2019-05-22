@@ -91,13 +91,13 @@ public class GmxGroFileReaderAndWriterTest extends GmxAbstractTest {
     @Test
     public void testGroFileWriting() {
         List<GmxGroFileAtomLine> atomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
-        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription(groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
                 .withBox(groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(atomLines) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(atomLines) //
                 .withFrameNo(0) //
                 .build();

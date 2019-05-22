@@ -31,13 +31,13 @@ public class GmxFrameUpdaterTest extends GmxAbstractTest {
     public void initFrame() {
         List<GmxGroFileAtomLine> groAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
 
-        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription(groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
                 .withBox(groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(groAtomLines) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(groAtomLines) //
                 .withFrameNo(1) //
                 .build();

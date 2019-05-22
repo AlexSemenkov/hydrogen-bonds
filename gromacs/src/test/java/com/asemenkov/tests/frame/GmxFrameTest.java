@@ -33,13 +33,13 @@ public class GmxFrameTest extends GmxAbstractTest {
 
     @BeforeMethod
     public void initFrame() {
-        frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription(groFileReader.readGroFileDescription(GRO_WATER_IN_ARGON_PATH)) //
                 .withBox(groFileReader.readGroFileBox(GRO_WATER_IN_ARGON_PATH)) //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
 
-        frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(1) //
                 .build();

@@ -29,7 +29,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test
     public void testFrameStructureFromScratch() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 200000) //
                 .withResidues("SOL", 200000) //
@@ -38,14 +38,15 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
         int[] indexes = new int[] { 199999, 200000, 200002 };
         verifyStructureMeta(frameStructure, "From scratch", 800000);
-        verifyAtomsSequence(frameStructure, 800000, indexes, new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 800000, indexes,
+                new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 800000, indexes, new String[] { "Ar", "OW", "HW2" });
         verifyResiduesSequence(frameStructure, 200000, 1);
     }
 
     @Test
     public void testFrameStructureFromScratchWithoutFreeAtoms() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withResidues("SOL", 200) //
                 .withBox(BOX) //
@@ -53,21 +54,23 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
         int[] indexes = new int[] { 0, 2, 599 };
         verifyStructureMeta(frameStructure, "From scratch", 600);
-        verifyAtomsSequence(frameStructure, 600, indexes, new Class[] { GmxAtomO.class, GmxAtomH.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 600, indexes,
+                new Class[] { GmxAtomO.class, GmxAtomH.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 600, indexes, new String[] { "OW", "HW2", "HW2" });
         verifyResiduesSequence(frameStructure, 200, 1);
     }
 
     @Test
     public void testFrameStructureFromScratchWithoutResidues() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 1000) //
                 .withBox(BOX) //
                 .build();
 
         Assert.assertTrue(frameStructure.getResidueAtomsMap().isEmpty(), "ResidueAtomsMap must be empty.");
-        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(), "ResidueIndexesMap must be empty.");
+        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(),
+                "ResidueIndexesMap must be empty.");
 
         int[] indexes = new int[] { 0, 999 };
         verifyStructureMeta(frameStructure, "From scratch", 1000);
@@ -77,7 +80,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameStructureFromScratchWithoutBox() {
-        frameStructureFromScratchBuilderSupplier.get() //
+        frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 1000) //
                 .withResidues("SOL", 200) //
@@ -86,7 +89,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameStructureFromScratchWithInvalidFreeAtom() {
-        frameStructureFromScratchBuilderSupplier.get() //
+        frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Argon", 1000) //
                 .withResidues("SOL", 200) //
@@ -98,9 +101,10 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test
     public void testFrameStructureFromGroFile() {
-        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(
+                GRO_WATER_IN_ARGON_PATH);
 
-        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription("From .gro file") //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withBox(BOX) //
@@ -108,7 +112,8 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
         int[] indexes = new int[] { 868, 869, 870 };
         verifyStructureMeta(frameStructure, "From .gro file", 872);
-        verifyAtomsSequence(frameStructure, 872, indexes, new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 872, indexes,
+                new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 872, indexes, new String[] { "Ar", "OW", "HW1" });
         verifyResiduesSequence(frameStructure, 1, 869);
     }
@@ -117,14 +122,15 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
     public void testFrameStructureFromGroFileWithoutResidue() {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_PATH);
 
-        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription("From .gro file") //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withBox(BOX) //
                 .build();
 
         Assert.assertTrue(frameStructure.getResidueAtomsMap().isEmpty(), "ResidueAtomsMap must be empty.");
-        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(), "ResidueIndexesMap must be empty.");
+        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(),
+                "ResidueIndexesMap must be empty.");
 
         int[] indexes = new int[] { 0, 869 };
         verifyStructureMeta(frameStructure, "From .gro file", 870);
@@ -136,7 +142,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
     public void testFrameStructureFromGroFileWithoutFreeAtoms() {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_PATH);
 
-        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromGroFileBuilder() //
                 .withDescription("From .gro file") //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withBox(BOX) //
@@ -151,9 +157,10 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameStructureFromGroFileWithoutBox() {
-        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_IN_ARGON_PATH);
+        List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(
+                GRO_WATER_IN_ARGON_PATH);
 
-        frameStructureFromGroFileBuilderSupplier.get() //
+        frameStructureFromGroFileBuilder() //
                 .withDescription("From .gro file") //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .build();
@@ -161,7 +168,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameStructureFromGroFileGroFileAtomLines() {
-        frameStructureFromScratchBuilderSupplier.get() //
+        frameStructureFromScratchBuilder() //
                 .withDescription("From .gro file") //
                 .withBox(BOX) //
                 .build();
@@ -179,10 +186,11 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
             atoms[i + 1] = atomFactory.get(GmxAtomO.class, "OW", i + 1, null);
             atoms[i + 2] = atomFactory.get(GmxAtomH.class, "HW1", i + 2, null);
             atoms[i + 3] = atomFactory.get(GmxAtomH.class, "HW2", i + 3, null);
-            residues[i / 4] = residueByAtomsFactory.get(GmxResidueH2O.class, i / 4, Arrays.copyOfRange(atoms, i + 1, i + 4));
+            residues[i / 4] = residueByAtomsFactory.get(GmxResidueH2O.class, i / 4,
+                    Arrays.copyOfRange(atoms, i + 1, i + 4));
         });
 
-        GmxFrameStructure frameStructure = frameStructureFromArraysBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(atoms) //
                 .withResiduesArray(residues) //
@@ -191,7 +199,8 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
         int[] indexes = new int[] { 100000, 100001, 100002 };
         verifyStructureMeta(frameStructure, "From arrays", 800000);
-        verifyAtomsSequence(frameStructure, 800000, indexes, new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 800000, indexes,
+                new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 800000, indexes, new String[] { "Ar", "OW", "HW1" });
         verifyResiduesSequence(frameStructure, 200000, 199999);
     }
@@ -207,18 +216,20 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
             atoms[i + 3] = atomFactory.get(GmxAtomH.class, "H", i + 3, null);
         });
 
-        GmxFrameStructure frameStructure = frameStructureFromArraysBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(atoms) //
                 .withBox(BOX) //
                 .build();
 
         Assert.assertTrue(frameStructure.getResidueAtomsMap().isEmpty(), "ResidueAtomsMap must be empty.");
-        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(), "ResidueIndexesMap must be empty.");
+        Assert.assertTrue(frameStructure.getResidueIndexesMap().isEmpty(),
+                "ResidueIndexesMap must be empty.");
 
         int[] indexes = new int[] { 1996, 1997, 1998 };
         verifyStructureMeta(frameStructure, "From arrays", 2000);
-        verifyAtomsSequence(frameStructure, 2000, indexes, new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 2000, indexes,
+                new Class[] { GmxAtomAr.class, GmxAtomO.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 2000, indexes, new String[] { "Ar", "O", "H" });
     }
 
@@ -231,10 +242,11 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
             atoms[i] = atomFactory.get(GmxAtomO.class, "OW", i, null);
             atoms[i + 1] = atomFactory.get(GmxAtomH.class, "HW1", i + 1, null);
             atoms[i + 2] = atomFactory.get(GmxAtomH.class, "HW2", i + 2, null);
-            residues[i / 3] = residueByAtomsFactory.get(GmxResidueH2O.class, i / 3, Arrays.copyOfRange(atoms, i, i + 3));
+            residues[i / 3] = residueByAtomsFactory.get(GmxResidueH2O.class, i / 3,
+                    Arrays.copyOfRange(atoms, i, i + 3));
         });
 
-        GmxFrameStructure frameStructure = frameStructureFromArraysBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(atoms) //
                 .withResiduesArray(residues) //
@@ -243,14 +255,15 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
 
         int[] indexes = new int[] { 897, 898, 899 };
         verifyStructureMeta(frameStructure, "From arrays", 900);
-        verifyAtomsSequence(frameStructure, 900, indexes, new Class[] { GmxAtomO.class, GmxAtomH.class, GmxAtomH.class });
+        verifyAtomsSequence(frameStructure, 900, indexes,
+                new Class[] { GmxAtomO.class, GmxAtomH.class, GmxAtomH.class });
         verifyAbbreviationsSequence(frameStructure, 900, indexes, new String[] { "OW", "HW1", "HW2" });
         verifyResiduesSequence(frameStructure, 300, 299);
     }
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameStructureFromArraysWithoutBox() {
-        frameStructureFromArraysBuilderSupplier.get() //
+        frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(new GmxAtom[] { atomFactory.get(GmxAtomO.class, "O", 0, null) }) //
                 .build();
@@ -259,7 +272,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameStructureFromArraysWithoutAtoms() {
         GmxResidue[] residues = new GmxResidue[300];
-        frameStructureFromArraysBuilderSupplier.get() //
+        frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withResiduesArray(residues) //
                 .withBox(BOX) //
@@ -272,7 +285,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
                 .mapToObj(i -> atomFactory.get(GmxAtomO.class, "O", i + 1, null)) //
                 .toArray(GmxAtom[]::new);
 
-        frameStructureFromArraysBuilderSupplier.get() //
+        frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(atoms) //
                 .withBox(BOX) //
@@ -285,7 +298,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
         GmxAtom h = atomFactory.get(GmxAtomH.class, "H", 1, null);
         GmxResidue h2o = residueByAtomsFactory.get(GmxResidueH2O.class, 0, new GmxAtom[] { o, h, h });
 
-        frameStructureFromArraysBuilderSupplier.get() //
+        frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(new GmxAtom[] { o, h }) //
                 .withResiduesArray(new GmxResidue[] { h2o }) //
@@ -301,7 +314,7 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
         GmxAtom h3 = atomFactory.get(GmxAtomH.class, "H", 3, null);
         GmxResidue h2o = residueByAtomsFactory.get(GmxResidueH2O.class, 0, new GmxAtom[] { o, h1, h2 });
 
-        frameStructureFromArraysBuilderSupplier.get() //
+        frameStructureFromArraysBuilder() //
                 .withDescription("From arrays") //
                 .withAtomsArray(new GmxAtom[] { o, h1, h3 }) //
                 .withResiduesArray(new GmxResidue[] { h2o }) //
@@ -317,25 +330,36 @@ public class GmxFrameStructureTest extends GmxAbstractTest {
         Assert.assertEquals(frameStructure.getAtomsNum(), atomsNum, "Wrong atoms number.");
     }
 
-    private void verifyAtomsSequence(GmxFrameStructure frameStructure, int length, int[] indexes, Class[] classes) {
+    private void verifyAtomsSequence(GmxFrameStructure frameStructure, int length, int[] indexes,
+            Class[] classes) {
         Assert.assertEquals(frameStructure.getAtomsSequence().length, length, "Wrong atoms sequence.");
-        Assert.assertEquals(indexes.length, classes.length, "Different lengths of indexes and classes arrays.");
+        Assert.assertEquals(indexes.length, classes.length,
+                "Different lengths of indexes and classes arrays.");
         IntStream.range(0, indexes.length).forEach(i -> Assert //
-                .assertEquals(frameStructure.getAtomsSequence()[indexes[i]], classes[i], "Wrong atoms sequence."));
+                .assertEquals(frameStructure.getAtomsSequence()[indexes[i]], classes[i],
+                        "Wrong atoms sequence."));
     }
 
-    private void verifyAbbreviationsSequence(GmxFrameStructure frameStructure, int length, int[] indexes, String[] abbreviations) {
-        Assert.assertEquals(frameStructure.getAtomAbbreviationsSequence().length, length, "Wrong atoms abbreviation.");
-        Assert.assertEquals(indexes.length, abbreviations.length, "Different lengths of indexes and abbreviations arrays.");
+    private void verifyAbbreviationsSequence(GmxFrameStructure frameStructure, int length, int[] indexes,
+            String[] abbreviations) {
+        Assert.assertEquals(frameStructure.getAtomAbbreviationsSequence().length, length,
+                "Wrong atoms abbreviation.");
+        Assert.assertEquals(indexes.length, abbreviations.length,
+                "Different lengths of indexes and abbreviations arrays.");
         IntStream.range(0, indexes.length).forEach(i -> Assert //
-                .assertEquals(frameStructure.getAtomAbbreviationsSequence()[indexes[i]], abbreviations[i], "Wrong atoms sequence."));
+                .assertEquals(frameStructure.getAtomAbbreviationsSequence()[indexes[i]], abbreviations[i],
+                        "Wrong atoms sequence."));
     }
 
     private void verifyResiduesSequence(GmxFrameStructure frameStructure, int residuesNum, int residueIndex) {
-        Assert.assertEquals(frameStructure.getResidueIndexesMap().keySet().size(), 1, "Wrong residue index map.");
-        Assert.assertEquals(frameStructure.getResidueIndexesMap().get(GmxResidueH2O.class).length, residuesNum);
-        Assert.assertEquals(frameStructure.getResidueAtomsMap().keySet().size(), residuesNum, "Wrong residue atoms map.");
-        Assert.assertEquals(frameStructure.getResidueAtomsMap().get(residueIndex).length, 3, "Wrong residue.");
+        Assert.assertEquals(frameStructure.getResidueIndexesMap().keySet().size(), 1,
+                "Wrong residue index map.");
+        Assert.assertEquals(frameStructure.getResidueIndexesMap().get(GmxResidueH2O.class).length,
+                residuesNum);
+        Assert.assertEquals(frameStructure.getResidueAtomsMap().keySet().size(), residuesNum,
+                "Wrong residue atoms map.");
+        Assert.assertEquals(frameStructure.getResidueAtomsMap().get(residueIndex).length, 3,
+                "Wrong residue.");
     }
 
 }

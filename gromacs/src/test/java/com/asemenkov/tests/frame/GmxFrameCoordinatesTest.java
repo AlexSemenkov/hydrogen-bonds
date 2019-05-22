@@ -28,14 +28,14 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratch() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 200000) //
                 .withResidues("SOL", 200000) //
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilder() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(100) //
                 .build();
@@ -51,13 +51,13 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratchWithoutResidues() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withFreeAtoms("Ar", 2000) //
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilder() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(110) //
                 .build();
@@ -67,13 +67,13 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test
     public void testFrameCoordinatesFromScratchWithoutFreeAtoms() {
-        GmxFrameStructure frameStructure = frameStructureFromScratchBuilderSupplier.get() //
+        GmxFrameStructure frameStructure = frameStructureFromScratchBuilder() //
                 .withDescription("From scratch") //
                 .withResidues("SOL", 2000) //
                 .withBox(BOX) //
                 .build();
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromScratchBuilder() //
                 .withFrameStructure(frameStructure) //
                 .withFrameNo(111) //
                 .build();
@@ -83,7 +83,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameCoordinatesFromScratchWithoutFrameStructure() {
-        frameCoordinatesFromScratchBuilderSupplier.get().withFrameNo(110).build();
+        frameCoordinatesFromScratchBuilder().withFrameNo(110).build();
     }
 
     // ======== TEST FRAME STRUCTURE FROM GRO FILE ========
@@ -93,7 +93,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(
                 GRO_WATER_IN_ARGON_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(123) //
                 .build();
@@ -107,7 +107,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
     public void testFrameCoordinatesFromGroFileWithoutResidues() {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_ARGON_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(987) //
                 .build();
@@ -121,7 +121,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
     public void testFrameCoordinatesFromGroFileWithoutFreeAtoms() {
         List<GmxGroFileAtomLine> groFileAtomLines = groFileReader.readGroFileAtomLines(GRO_WATER_PATH);
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromGroFileBuilder() //
                 .withGroFileAtomLines(groFileAtomLines) //
                 .withFrameNo(5000) //
                 .build();
@@ -133,7 +133,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxIoException.class)
     public void testFrameCoordinatesFromGroFileWithoutGroFileAtomLines() {
-        frameCoordinatesFromGroFileBuilderSupplier.get().withFrameNo(110).build();
+        frameCoordinatesFromGroFileBuilder().withFrameNo(110).build();
     }
 
     // ======== TEST FRAME STRUCTURE FROM ARRAYS ========
@@ -149,7 +149,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
             atoms[i + 1] = atomFactory.get(GmxAtomH.class, "H", i + 1, hCoordinates);
         });
 
-        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromArraysBuilderSupplier.get() //
+        GmxFrameCoordinates frameCoordinates = frameCoordinatesFromArraysBuilder() //
                 .withAtomsArray(atoms) //
                 .withFrameNo(2) //
                 .build();
@@ -161,7 +161,7 @@ public class GmxFrameCoordinatesTest extends GmxAbstractTest {
 
     @Test(expectedExceptions = GmxFrameException.class)
     public void testFrameCoordinatesFromAtomsArrayWithoutArray() {
-        frameCoordinatesFromArraysBuilderSupplier.get().withFrameNo(110).build();
+        frameCoordinatesFromArraysBuilder().withFrameNo(110).build();
     }
 
     private void verifyFrameCoordinates(GmxFrameCoordinates frameCoordinates, int frameNo, int length) {

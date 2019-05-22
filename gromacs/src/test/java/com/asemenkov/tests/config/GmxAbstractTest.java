@@ -23,13 +23,13 @@ import com.asemenkov.utils.config.Factories.PentaFactory;
 import com.asemenkov.utils.config.Factories.TetraFactory;
 import com.asemenkov.utils.config.Factories.TriFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Supplier;
 
 /**
  * @author asemenkov
@@ -37,6 +37,7 @@ import java.util.function.Supplier;
  */
 @ContextConfiguration(classes = { GmxTestsConfig.class, GmxFrameConfig.class, GmxIoConfig.class })
 public abstract class GmxAbstractTest extends AbstractTestNGSpringContextTests {
+    private @Autowired ApplicationContext context;
 
     protected static final float[] BOX = new float[] { 40, 50, 60 };
     protected static final Path XTC_WATER_IN_ARGON_PATH = //
@@ -54,13 +55,33 @@ public abstract class GmxAbstractTest extends AbstractTestNGSpringContextTests {
     protected @Autowired GmxGroFileWriter groFileWriter;
     protected @Autowired GmxGroFileReader groFileReader;
 
-    protected @Autowired Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameStructureFromArraysBuilder> frameStructureFromArraysBuilderSupplier;
+    public GmxFrame createFrame(GmxFrameStructure structure, GmxFrameCoordinates coordinates) {
+        return frameFactory.get(structure, coordinates);
+    }
 
-    protected @Autowired Supplier<GmxFrameCoordinatesFromGroFileBuilder> frameCoordinatesFromGroFileBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameCoordinatesFromScratchBuilder> frameCoordinatesFromScratchBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameCoordinatesFromArraysBuilder> frameCoordinatesFromArraysBuilderSupplier;
+    public GmxFrameStructureFromGroFileBuilder frameStructureFromGroFileBuilder() {
+        return context.getBean(GmxFrameStructureFromGroFileBuilder.class);
+    }
+
+    public GmxFrameStructureFromScratchBuilder frameStructureFromScratchBuilder() {
+        return context.getBean(GmxFrameStructureFromScratchBuilder.class);
+    }
+
+    public GmxFrameStructureFromArraysBuilder frameStructureFromArraysBuilder() {
+        return context.getBean(GmxFrameStructureFromArraysBuilder.class);
+    }
+
+    public GmxFrameCoordinatesFromGroFileBuilder frameCoordinatesFromGroFileBuilder() {
+        return context.getBean(GmxFrameCoordinatesFromGroFileBuilder.class);
+    }
+
+    public GmxFrameCoordinatesFromScratchBuilder frameCoordinatesFromScratchBuilder() {
+        return context.getBean(GmxFrameCoordinatesFromScratchBuilder.class);
+    }
+
+    public GmxFrameCoordinatesFromArraysBuilder frameCoordinatesFromArraysBuilder() {
+        return context.getBean(GmxFrameCoordinatesFromArraysBuilder.class);
+    }
 
     /**
      * @implSpec t1 -- (Class) atom class
