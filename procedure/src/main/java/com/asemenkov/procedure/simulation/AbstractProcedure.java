@@ -1,104 +1,45 @@
 package com.asemenkov.procedure.simulation;
 
-import com.asemenkov.command.config.CmdGmxCommandsConfig;
-import com.asemenkov.gromacs.frame.GmxFrame;
-import com.asemenkov.gromacs.frame.config.GmxFrameConfig;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinates;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesFromArraysBuilder;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesFromGroFileBuilder;
-import com.asemenkov.gromacs.frame.coordinates.GmxFrameCoordinatesFromScratchBuilder;
-import com.asemenkov.gromacs.frame.structure.GmxFrameStructure;
-import com.asemenkov.gromacs.frame.structure.GmxFrameStructureFromArraysBuilder;
-import com.asemenkov.gromacs.frame.structure.GmxFrameStructureFromGroFileBuilder;
-import com.asemenkov.gromacs.frame.structure.GmxFrameStructureFromScratchBuilder;
-import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
-import com.asemenkov.gromacs.io.config.GmxIoConfig;
-import com.asemenkov.gromacs.io.gro.GmxGroFileReader;
-import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
-import com.asemenkov.gromacs.particles.GmxAtom;
-import com.asemenkov.gromacs.particles.GmxResidue;
-import com.asemenkov.gromacs.particles.utils.GmxAnglePredicate;
-import com.asemenkov.procedure.config.ProceduresConfig;
-import com.asemenkov.utils.config.Factories;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
+import com.asemenkov.utils.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
 
 /**
  * @author asemenkov
- * @since Sep 07, 2018
+ * @since May 16, 2019
  */
-@Import({ ProceduresConfig.class, CmdGmxCommandsConfig.class, GmxFrameConfig.class, GmxIoConfig.class })
-public abstract class AbstractProcedure {
+public class AbstractProcedure extends InjectionsHolder {
 
-    protected @Autowired GmxXtcFileNativeReader xtcFileNativeReader;
-    protected @Autowired GmxGroFileWriter groFileWriter;
-    protected @Autowired GmxGroFileReader groFileReader;
+    @PostConstruct
+    public void createSimulationPath(){
+        FileUtils.createDirectoryIfNotExists(simulationPath);
+    }
 
-    protected @Autowired Supplier<GmxFrameStructureFromGroFileBuilder> frameStructureFromGroFileBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameStructureFromScratchBuilder> frameStructureFromScratchBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameStructureFromArraysBuilder> frameStructureFromArraysBuilderSupplier;
+    // ======== UTILITY METHODS ========
 
-    protected @Autowired Supplier<GmxFrameCoordinatesFromGroFileBuilder> frameCoordinatesFromGroFileBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameCoordinatesFromScratchBuilder> frameCoordinatesFromScratchBuilderSupplier;
-    protected @Autowired Supplier<GmxFrameCoordinatesFromArraysBuilder> frameCoordinatesFromArraysBuilderSupplier;
+    protected Path copyFileToInputDir(@NotNull Path pathToFile) {
+        Path destPath = Paths.get(simulationPath.toString(), pathToFile.getFileName().toString());
+        return FileUtils.copyFile(pathToFile, destPath);
+    }
 
-    /**
-     * @implSpec t1 -- (Class) atom class
-     * @implSpec t2 -- (String) atom abbreviation
-     * @implSpec t3 -- (Integer) atom no
-     * @implSpec t4 -- (float[]) atom coordinates x, y, z
-     */
-    protected @Autowired Factories.TetraFactory<GmxAtom, Class<? extends GmxAtom>, String, Integer, float[]> atomFactory;
+    protected Path getPathForOutputFile(@NotNull String fileName) {
+        if (fileName.contains(File.separator) || fileName.split("\\.").length != 2) //
+            throw new FileUtils.FileUtilsException("Invalid name for output file: " + fileName);
+        return Paths.get(simulationPath.toString(), fileName);
+    }
 
-    /**
-     * @implSpec t1 -- (Class) residue class
-     * @implSpec t2 -- (Integer) residue no
-     * @implSpec t3 -- (GmxAtom[]) residue atoms
-     */
-    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueFactory;
-
-    /**
-     * @implSpec t1 -- (Class) residue class
-     * @implSpec t2 -- (float[]) pivot atom coordinates
-     */
-    protected @Autowired Factories.DuoFactory<GmxAtom[], Class<? extends GmxResidue>, float[]> residueAtomsFactory;
-
-    /**
-     * @implSpec t1 -- (Class) residue class
-     * @implSpec t2 -- (Integer) residue no
-     * @implSpec t3 -- (GmxAtom[]) residue atoms
-     */
-    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, GmxAtom[]> residueByAtomsFactory;
-
-    /**
-     * @implSpec t1 -- (Class) residue class
-     * @implSpec t2 -- (Integer) residue no
-     * @implSpec t3 -- (float[]) residue pivot point coordinates
-     */
-    protected @Autowired Factories.TriFactory<GmxResidue, Class<? extends GmxResidue>, Integer, float[]> residueByCoordsFactory;
-
-    /**
-     * @implSpec t1 -- (Class) residue class
-     * @implSpec t2 -- (Integer[]) residues no
-     * @implSpec t3 -- (GmxAtom[][]) residue atoms, 1 row = atoms of 1 residue
-     */
-    protected @Autowired Factories.TriFactory<GmxResidue[], Class<? extends GmxResidue>, int[], GmxAtom[][]> residuesFactory;
-
-    /**
-     * @implSpec t1 -- (GmxFrameStructure) frame structure
-     * @implSpec t2 -- (GmxFrameCoordinates) frame coordinates
-     */
-    protected @Autowired Factories.DuoFactory<GmxFrame, GmxFrameStructure, GmxFrameCoordinates> frameFactory;
-
-    /**
-     * @implSpec t1 -- (GmxAtom) vertex atom
-     * @implSpec t2 -- (GmxAtom) point1 atom
-     * @implSpec t3 -- (GmxAtom) point2 atom
-     * @implSpec t4 -- (Double) expected cosine value
-     * @implSpec t5 -- (Double) closeness of fit
-     */
-    protected @Autowired Factories.PentaFactory<GmxAnglePredicate, GmxAtom, GmxAtom, GmxAtom, Double, Double> anglePredicateFactory;
+    protected Path getLastModifiedFileWithExtension(@NotNull String extension) {
+        String ext = extension.replaceFirst("\\.", "").toLowerCase();
+        return FileUtils.getFilesInDirectory(simulationPath).stream() //
+                .filter(p -> p.toFile().isFile()) //
+                .filter(p -> FilenameUtils.getExtension(p.getFileName().toString()).equals(ext)) //
+                .max(Comparator.comparing(FileUtils::getLastModifiedAttr)).orElse(null);
+    }
 
 }
