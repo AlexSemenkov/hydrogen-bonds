@@ -8,11 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.*;
@@ -27,14 +25,10 @@ public class FileUtils {
     private FileUtils() {
     }
 
-    public static Path getProjectHome() {
-        return Paths.get("").toAbsolutePath().getParent();
-    }
-
     // ======== DIRECTORY ACTIONS ========
 
-    public static void createDirectoryIfNotExist(Path path) {
-        if (fileExists(path)) return;
+    public static void createDirectoryIfNotExists(Path path) {
+        if (pathExists(path)) return;
 
         try {
             Files.createDirectories(path);
@@ -43,8 +37,8 @@ public class FileUtils {
         }
     }
 
-    public static List<Path> getFoldersInCurrentDirectory(Path path) {
-        checkDir(path);
+    public static List<Path> getFoldersInDirectory(Path path) {
+        if(!pathExists(path)) return Collections.emptyList();
         File[] files = path.toFile().listFiles();
         if (files == null) return new ArrayList<>();
         return Arrays.stream(files) //
@@ -53,8 +47,8 @@ public class FileUtils {
                 .collect(Collectors.toList());
     }
 
-    public static List<Path> getFilesInCurrentDirectory(Path path) {
-        checkDir(path);
+    public static List<Path> getFilesInDirectory(Path path) {
+        if(!pathExists(path)) return Collections.emptyList();
         File[] files = path.toFile().listFiles();
         if (files == null) return new ArrayList<>();
         return Arrays.stream(files) //
@@ -63,30 +57,37 @@ public class FileUtils {
                 .collect(Collectors.toList());
     }
 
-    public static List<Path> getNestedFilesInCurrentDirectory(Path path) {
-        checkDir(path);
-        List<Path> toReturn = new ArrayList<>(getFilesInCurrentDirectory(path));
-
-        List<Path> folders = getFoldersInCurrentDirectory(path);
-        if (folders.isEmpty()) folders.stream().map(FileUtils::getNestedFilesInCurrentDirectory) //
+    public static List<Path> getNestedFilesInDirectory(Path path) {
+        if(!pathExists(path)) return Collections.emptyList();
+        List<Path> toReturn = new ArrayList<>(getFilesInDirectory(path));
+        List<Path> folders = getFoldersInDirectory(path);
+        if (folders.isEmpty()) folders.stream() //
+                .map(FileUtils::getNestedFilesInDirectory) //
                 .forEach(toReturn::addAll);
-
         return toReturn;
     }
 
     // ======== FILE ACTIONS ========
 
-    public static boolean fileExists(Path path) {
-        File file = path.toFile();
-        return file.exists();
+    public static boolean pathExists(Path path) {
+        return path.toFile().exists();
     }
 
     public static void verifyFileExists(Path path) {
-        if (!fileExists(path)) throw new FileUtilsException("File not found: " + path);
+        if (!pathExists(path) || !path.toFile().isFile()) //
+            throw new FileUtilsException("File not found: " + path);
+    }
 
-        File file = path.toFile();
+    public static void verifyDirExists(Path path) {
+        if (!pathExists(path) || path.toFile().isFile()) //
+            throw new FileUtilsException("Directory not found: " + path);
+    }
 
-        if (!file.isFile()) throw new FileUtilsException("It's not a file: " + path);
+    public static void verifyFileInDirExists(Path pathToFile, Path pathToDir) {
+        verifyFileExists(pathToFile);
+        verifyDirExists(pathToDir);
+        if (!pathToFile.getParent().equals(pathToDir)) //
+            throw new FileUtilsException("File [" + pathToFile + "] not found in dir: " + pathToDir);
     }
 
     public static void verifyExtension(Path path, String... extensions) {
@@ -96,41 +97,46 @@ public class FileUtils {
             throw new FileUtilsException("Extension of " + path + " not in " + Arrays.toString(extensions));
     }
 
-    public static void copyFile(Path from, Path to) {
+    public static Path copyFile(Path from, Path to) {
         verifyFileExists(from);
-        verifyFileExists(to);
-
         try {
-            Files.copy(from, to);
+            return Files.copy(from, to);
         } catch (IOException exception) {
             throw new FileUtilsException(exception);
         }
     }
 
-    public static void moveFile(Path from, Path to) {
+    public static Path moveFile(Path from, Path to) {
         verifyFileExists(from);
-        verifyFileExists(to);
-
         try {
-            Files.move(from, to);
+            return Files.move(from, to);
         } catch (IOException exception) {
             throw new FileUtilsException(exception);
         }
     }
 
-    public static void renameFile(Path path, String newName) {
+    public static Path renameFile(Path path, String newName) {
         verifyFileExists(path);
-
         try {
-            Files.move(path, path.resolveSibling(newName));
+            return Files.move(path, path.resolveSibling(newName));
         } catch (IOException exception) {
             throw new FileUtilsException(exception);
         }
     }
 
-    public static void deleteFileIfExists(Path path) {
+    public static boolean deleteFileIfExists(Path path) {
         try {
-            Files.deleteIfExists(path);
+            return Files.deleteIfExists(path);
+        } catch (IOException exception) {
+            throw new FileUtilsException(exception);
+        }
+    }
+
+    // ======== ATTRIBUTES ========
+
+    public static FileTime getLastModifiedAttr(Path path) {
+        try {
+            return Files.readAttributes(path, BasicFileAttributes.class).lastModifiedTime();
         } catch (IOException exception) {
             throw new FileUtilsException(exception);
         }
@@ -213,13 +219,6 @@ public class FileUtils {
     }
 
     // ======== SUPPORT METHODS ========
-
-    private static void checkDir(Path path) {
-        if (!fileExists(path)) throw new FileUtilsException("Directory not found: %s" + path);
-
-        File file = path.toFile();
-        if (!file.isDirectory()) throw new FileUtilsException("It's not a directory: " + path);
-    }
 
     private static void writeData(Path path, Collection<String> lines, OpenOption option) {
         try {

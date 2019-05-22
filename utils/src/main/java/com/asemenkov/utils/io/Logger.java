@@ -2,8 +2,10 @@ package com.asemenkov.utils.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author asemenkov
@@ -16,12 +18,14 @@ public class Logger {
     }
 
     public static void logGmxOutput(Process process) {
-        BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        InputStream error = process.getErrorStream();
+        InputStream input = process.getInputStream();
+        new Thread(getReaderForStream(error, "[gmx-info] <<< ")).start();
+        new Thread(getReaderForStream(input, "[gmx-error] <<< ")).start();
         try {
-            for (String line = input.readLine(); line != null; line = input.readLine()) //
-                System.out.println("<<< " + line);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            process.waitFor();
+        } catch (InterruptedException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -32,6 +36,8 @@ public class Logger {
     public static void error(Object message) {
         log(message.toString(), "ERROR");
     }
+
+    // ======== SUPPORT METHODS ========
 
     private static void log(String message, String infoOrWarning) {
         Exception e = new Exception();
@@ -46,4 +52,21 @@ public class Logger {
                 .append(" - ") //
                 .append(message));
     }
+
+    private static Runnable getReaderForStream(InputStream inputStream, String prefix) {
+        return () -> {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                    System.out.println(prefix);
+                    System.out.print(line);
+                    TimeUnit.MILLISECONDS.sleep(1);
+                }
+                inputStream.close();
+            } catch (IOException | InterruptedException exception) {
+                throw new RuntimeException(exception);
+            }
+        };
+    }
+
 }

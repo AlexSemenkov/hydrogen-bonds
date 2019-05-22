@@ -2,63 +2,60 @@ package com.asemenkov.utils.config;
 
 import com.asemenkov.utils.io.FileUtils;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author asemenkov
  * @since Sep 23, 2018
  */
 @Configuration
-@PropertySource("classpath:path.properties")
 public class PathConfig {
 
     @Value("${simulation_name:default-simulation}") //
     private String simulationName;
 
-    @Value("${working_directory:${user.home}}") //
+    @Value("${working_directory:${user.dir}}") //
     private String workingDirectory;
 
     @Value("${gromacs_folder:gromacs}") //
     private String gromacsFolder;
 
-    @Value("${datetime_format:yyyy-MM-hh_HH:mm:ss}") //
+    @Value("${datetime_format:[yyyy-MM-dd][HH_mm_ss]}") //
     private String datetimeFormat;
 
-    @Value("${input_folder:input}") //
-    private String inputFolder;
+    @Value("${datetime_zone:Europe/Minsk}") //
+    private String datetime_zone;
 
-    @Value("${output_folder:output}") //
-    private String outputFolder;
+    @Value("${index_format:[No %d]}") //
+    private String indexFormat;
 
-    private @Autowired Path simulationPath;
+    @Value("${index_regex:^\\[No (\\d+)\\].*}") //
+    private String indexRegex;
 
     @Bean
     public Path simulationPath() {
-        String datetime = DateTime.now().toString(datetimeFormat);
-        Path path = Paths.get(workingDirectory, gromacsFolder, simulationName, datetime);
-        FileUtils.createDirectoryIfNotExist(path);
-        return path;
-    }
+        Path simulationDir = Paths.get(workingDirectory, gromacsFolder, simulationName);
 
-    @Bean
-    public Path inputPath() {
-        Path path = Paths.get(simulationPath.toString(), inputFolder);
-        FileUtils.createDirectoryIfNotExist(path);
-        return path;
-    }
+        int index = FileUtils.getFoldersInDirectory(simulationDir).stream() //
+                .map(Path::getFileName).map(Path::toString) //
+                .map(Pattern.compile(indexRegex)::matcher) //
+                .filter(Matcher::find) //
+                .mapToInt(matcher -> Integer.valueOf(matcher.group(1))) //
+                .max().orElse(0);
 
-    @Bean
-    public Path outputPath() {
-        Path path = Paths.get(simulationPath.toString(), outputFolder);
-        FileUtils.createDirectoryIfNotExist(path);
-        return path;
+        String pathName = String.format(indexFormat, ++index).concat(DateTime //
+                .now(DateTimeZone.forID(datetime_zone)) //
+                .toString(datetimeFormat));
+
+        return Paths.get(simulationDir.toString(), pathName);
     }
 
 }
