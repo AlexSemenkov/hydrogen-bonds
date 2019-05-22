@@ -3,9 +3,11 @@ package com.asemenkov.gromacs.io.config;
 import com.asemenkov.gromacs.io.GmxXtcFileNativeReader;
 import com.asemenkov.gromacs.io.gro.GmxGroFileReader;
 import com.asemenkov.gromacs.io.gro.GmxGroFileWriter;
+import com.asemenkov.utils.config.PathConfig;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Scope;
  * @since Apr 22, 2018
  */
 @Configuration
+@Import(PathConfig.class)
 public class GmxIoConfig {
 
     @Bean

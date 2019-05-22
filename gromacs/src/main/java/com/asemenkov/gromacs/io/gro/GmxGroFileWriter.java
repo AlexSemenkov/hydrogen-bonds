@@ -28,7 +28,7 @@ public class GmxGroFileWriter {
     public Path writeGroFile(GmxFrame frame, Path directory, String fileName) {
         if (!fileName.endsWith(EXTENSION)) fileName += EXTENSION;
 
-        FileUtils.createDirectoryIfNotExist(directory);
+        FileUtils.createDirectoryIfNotExists(directory);
         Path path = Paths.get(directory.toString(), fileName);
         BufferedWriter writer = FileUtils.getBufferedWriter(path, true, true);
         Logger.log("Writing file: " + path);

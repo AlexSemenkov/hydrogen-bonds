@@ -5,7 +5,9 @@ import com.asemenkov.gromacs.io.exceptions.GmxIoException;
 import com.asemenkov.utils.io.FileUtils;
 import com.asemenkov.utils.io.Logger;
 import org.apache.commons.lang3.SystemUtils;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,15 +19,18 @@ public class GmxXtcFileNativeReader {
 
     private static boolean isBusy;
 
-    static {
-        String lib = Paths.get(FileUtils.getProjectHome().toString(), //
-                "gromacs", "lib", "xtc-native-reader").toString();
+    @Value("${dir.lib:lib/gromacs}") private String libDirectory;
+
+    @PostConstruct
+    public void postConstruct() {
+        String lib = Paths.get(libDirectory, "xtc-native-reader").toString();
 
         if (SystemUtils.IS_OS_LINUX) lib += ".so";
         else if (SystemUtils.IS_OS_MAC) lib += ".dylib";
         else if (SystemUtils.IS_OS_WINDOWS) lib += ".dll";
         else throw new GmxIoException("Unsupported OS: " + SystemUtils.OS_NAME);
 
+        FileUtils.verifyFileExists(Paths.get(lib));
         Logger.log("Loading xtc-native-reader library: " + lib);
         System.load(lib);
     }

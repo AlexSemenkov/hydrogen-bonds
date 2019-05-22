@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 /**
  * @author asemenkov
@@ -24,15 +23,13 @@ public class GmxFrameUpdater {
     // ======== STATIC FIELDS INJECTIONS ========
 
     @Autowired
-    protected void setFrameStructureFromArraysBuilder( //
-            Supplier<GmxFrameStructureFromArraysBuilder> supplier) {
-        GmxFrameUpdater.frameStructureFromArraysBuilder = supplier.get();
+    protected void setFrameStructureFromArraysBuilder(GmxFrameStructureFromArraysBuilder builder) {
+        GmxFrameUpdater.frameStructureFromArraysBuilder = builder;
     }
 
     @Autowired
-    protected void setFrameCoordinatesFromArraysBuilder( //
-            Supplier<GmxFrameCoordinatesFromArraysBuilder> supplier) {
-        GmxFrameUpdater.frameCoordinatesFromArraysBuilder = supplier.get();
+    protected void setFrameCoordinatesFromArraysBuilder(GmxFrameCoordinatesFromArraysBuilder builder) {
+        GmxFrameUpdater.frameCoordinatesFromArraysBuilder = builder;
     }
 
     // ======== PUBLIC INTERFACE ========
